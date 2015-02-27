@@ -1,0 +1,16 @@
+# Build files
+build/
+obj/
+
+# Lib binary files
+lib/
+bin/
+
+# Project files
+.vs/
+*.sdf
+*.opensdf
+*.suo
+*.vcxproj.user
+
+
