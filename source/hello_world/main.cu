@@ -63,6 +63,10 @@ int main() {
 
 	CE(cudaMemcpy(h_output, d_output, 13 * sizeof(char), cudaMemcpyDeviceToHost));
 
+	cudaFree(d_inputChars);
+	cudaFree(d_indexes);
+	cudaFree(d_output);
+
 	std::cout << h_output << std::endl;
 
 	return 0;
