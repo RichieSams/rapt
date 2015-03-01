@@ -4,6 +4,8 @@
  * Copyright Adrian Astley 2015
  */
 
+#pragma once
+
 #include "cuda_runtime.h"
 
 #define WIN32_LEAN_AND_MEAN
