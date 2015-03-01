@@ -7,7 +7,7 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#include "cuda_util.h"
+#include "graphics/cuda_util.h"
 
 typedef unsigned char byte;
 typedef unsigned char uint8;

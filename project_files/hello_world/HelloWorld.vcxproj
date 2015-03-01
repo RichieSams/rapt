@@ -70,19 +70,23 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\build\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
     <IntDir>..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+    <IncludePath>..\..\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\build\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
     <IntDir>..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+    <IncludePath>..\..\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\build\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
     <IntDir>..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+    <IncludePath>..\..\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\build\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
     <IntDir>..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+    <IncludePath>..\..\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -164,9 +168,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="..\..\source\hello_world\main.cu" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\source\hello_world\cuda_util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
