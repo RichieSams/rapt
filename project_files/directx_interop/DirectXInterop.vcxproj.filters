@@ -1,10 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\source\directx_interop\directx_interop.cpp" />
-    <ClCompile Include="..\..\source\directx_interop\main.cpp" />
+    <ClCompile Include="..\..\source\directx_interop\directx_interop.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\directx_interop\directx_interop.draw.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\directx_interop\main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\directx_interop\directx_interop.h" />
+    <Filter Include="Core">
+      <UniqueIdentifier>{23daeedc-fafe-42c6-8573-0bad6fd2f29c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cuda Kernels">
+      <UniqueIdentifier>{83523b5e-6638-42f1-853a-8f09a06cb2fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{4199ac4d-6bc9-4a18-9e1b-723980840e62}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\source\directx_interop\fullscreen_triangle_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\source\directx_interop\copy_cuda_output_to_backbuffer_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\directx_interop\types.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\directx_interop\directx_interop.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="..\..\source\directx_interop\draw_frame.cu">
+      <Filter>Cuda Kernels</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

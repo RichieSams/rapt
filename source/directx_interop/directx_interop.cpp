@@ -7,8 +7,10 @@
 #include "directx_interop/directx_interop.h"
 
 #include "graphics/d3d_util.h"
+#include "graphics/d3d_texture2d.h"
+#include "graphics/cuda_texture2d.h"
 
-#include <DirectXColors.h>
+#include <cuda_runtime_api.h>
 
 
 namespace DirectXInterop {
@@ -23,6 +25,15 @@ bool DirectXInterop::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint
 	if (!Engine::RAICEngine::Initialize(mainWndCaption, screenWidth, screenHeight, fullscreen)) {
 		return false;
 	}
+
+	m_hdrTextureD3D = new Graphics::D3DTexture2D(m_device, screenWidth, screenHeight, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_SHADER_RESOURCE, 1);
+	m_hdrTextureCuda = new Graphics::CudaTexture2D(screenWidth, screenHeight, 16u);
+	m_hdrTextureCuda->RegisterResource(m_hdrTextureD3D->GetTexture(), cudaGraphicsRegisterFlagsNone);
+
+	Graphics::LoadVertexShader(L"fullscreen_triangle_vs.cso", m_device, &m_fullscreenTriangleVS);
+	Graphics::LoadPixelShader(L"copy_cuda_output_to_backbuffer_ps.cso", m_device, &m_copyCudaOutputToBackbufferPS);
+
+	return true;
 }
 
 void DirectXInterop::Shutdown() {
@@ -48,6 +59,9 @@ void DirectXInterop::OnResize() {
 	HR(m_device->CreateRenderTargetView(backBuffer, 0, &m_backbufferRTV));
 	ReleaseCOM(backBuffer);
 
+	// Set the backbuffer as the rendertarget
+	m_immediateContext->OMSetRenderTargets(1u, &m_backbufferRTV, nullptr);
+
 	// Set the viewport transform.
 	m_screenViewport.TopLeftX = 0;
 	m_screenViewport.TopLeftY = 0;
@@ -59,10 +73,6 @@ void DirectXInterop::OnResize() {
 	m_immediateContext->RSSetViewports(1, &m_screenViewport);
 }
 
-void DirectXInterop::DrawFrame() {
-	m_immediateContext->ClearRenderTargetView(m_backbufferRTV, DirectX::Colors::LightBlue);
 
-	m_swapChain->Present(1u, 0u);
-}
 
 } // End of namespace DirectXInterop
