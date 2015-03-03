@@ -32,6 +32,7 @@
     <ClCompile Include="..\..\source\common\file_io_util.cpp" />
     <ClCompile Include="..\..\source\engine\clock.cpp" />
     <ClCompile Include="..\..\source\engine\raic_engine.cpp" />
+    <ClCompile Include="..\..\source\graphics\cuda_util.cpp" />
     <ClCompile Include="..\..\source\graphics\d3d_util.cpp" />
     <ClCompile Include="..\..\source\graphics\dxerr.cpp" />
   </ItemGroup>
