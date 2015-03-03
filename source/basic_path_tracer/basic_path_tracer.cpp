@@ -10,7 +10,7 @@
 #include "graphics/d3d_texture2d.h"
 #include "graphics/cuda_texture2d.h"
 
-#include <cuda_runtime_api.h>
+#include <cuda_runtime.h>
 
 
 namespace BasicPathTracer {

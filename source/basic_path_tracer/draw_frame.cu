@@ -7,6 +7,7 @@
 #include "common/typedefs.h"
 
 #include <stdio.h>
+#include <cuda_runtime.h>
 
 
 __global__ void cuda_kernel_texture_2d(unsigned char *surface, int width, int height, size_t pitch, float t) {
