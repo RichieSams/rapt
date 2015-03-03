@@ -1,6 +1,7 @@
 # Build files
 build/
 obj/
+*.pdb
 
 # Lib binary files
 lib/
