@@ -36,6 +36,12 @@
     <ClInclude Include="..\..\source\common\file_io_util.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\graphics\cuda_texture2d.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\d3d_texture2d.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\clock.cpp">
@@ -54,6 +60,12 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\graphics\cuda_util.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graphics\d3d_texture2d.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graphics\cuda_texture2d.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
