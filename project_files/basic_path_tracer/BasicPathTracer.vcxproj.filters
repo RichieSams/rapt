@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.draw.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\basic_path_tracer\main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\source\basic_path_tracer\copy_cuda_output_to_backbuffer_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\source\basic_path_tracer\fullscreen_triangle_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\basic_path_tracer\types.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{ee9ad680-4b1c-461b-9253-badc8bd1152f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{50463c18-a2c9-4a2b-b43d-6096ad10e8c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CUDA Kernels">
+      <UniqueIdentifier>{02acde8e-ef6c-4fc5-b698-ec2b522164cb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\basic_path_tracer\basic_path_tracer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="..\..\source\basic_path_tracer\draw_frame.cu">
+      <Filter>CUDA Kernels</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
