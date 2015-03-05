@@ -30,17 +30,27 @@ __global__ void RayTrace(unsigned char *textureData, uint width, uint height, si
 		return;
 	}
 
-	// Calculate the first ray for this pixel
-	float3 ray = CalculateRayDirectionFromPixel(x, y, width, height, camera);
+	// Global threadId
+	int threadId = (blockIdx.x + blockIdx.y * gridDim.x) * (blockDim.x * blockDim.y) + (threadIdx.y * blockDim.x) + threadIdx.x;
+
+	// Create random number generator
+	curandState randState;
+	curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
+
+	//// Calculate the first ray for this pixel
+	//float3 ray = CalculateRayDirectionFromPixel(x, y, width, height, camera);
+
+	// Generate a uniform random number
+	float randNum = curand_uniform(&randState);
 
 	// Get a pointer to the pixel at (x,y)
 	float *pixel = (float *)(textureData + y * pitch) + 4 /*RGBA*/ * x;
 
 	if (x < width && y < height) {
 		// Write out pixel data
-		pixel[0] = (ray.x + 1.0f) * 0.5f;
-		pixel[1] = (ray.y + 1.0f) * 0.5f;
-		pixel[2] = (ray.z + 1.0f) * 0.5f;
+		pixel[0] = randNum;
+		pixel[1] = randNum;
+		pixel[2] = randNum;
 		pixel[3] = 1.0f;
 	}
 }
