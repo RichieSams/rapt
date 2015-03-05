@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\source\graphics\d3d_util.h" />
     <ClInclude Include="..\..\source\graphics\dxerr.h" />
     <ClInclude Include="..\..\source\graphics\d3d_texture2d.h" />
+    <ClInclude Include="..\..\source\graphics\helper_math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\common\file_io_util.cpp" />
