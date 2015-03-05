@@ -7,6 +7,7 @@
 #pragma once
 
 #include "engine/raic_engine.h"
+#include "engine/camera.h"
 
 
 namespace Graphics {
@@ -29,6 +30,10 @@ private:
 
 	ID3D11VertexShader *m_fullscreenTriangleVS;
 	ID3D11PixelShader *m_copyCudaOutputToBackbufferPS;
+
+	Engine::HostCamera m_hostCamera;
+
+	uint m_frameNumber;
 
 public:
 	bool Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen);

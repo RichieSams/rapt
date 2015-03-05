@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\basic_path_tracer\basic_path_tracer.h" />
+    <ClInclude Include="..\..\source\basic_path_tracer\path_trace.cuh" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\source\basic_path_tracer\copy_cuda_output_to_backbuffer_ps.hlsl">
@@ -218,7 +219,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="..\..\source\basic_path_tracer\draw_frame.cu" />
+    <CudaCompile Include="..\..\source\basic_path_tracer\cuda_kernel_call_wrapper.cu" />
+    <CudaCompile Include="..\..\source\basic_path_tracer\path_trace.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

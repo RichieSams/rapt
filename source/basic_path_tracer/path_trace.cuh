@@ -1,0 +1,15 @@
+/* raic - RichieSam's Adventures in Cuda
+ *
+ * raic is the legal property of Adrian Astley
+ * Copyright Adrian Astley 2015
+ */
+
+#include "common/typedefs.h"
+
+#include "engine/camera.h"
+
+#include <cuda_runtime.h>
+#include <vector_types.h>
+
+
+__global__ void RayTrace(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera camera, uint hashedFrameNumber);

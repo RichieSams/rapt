@@ -6,6 +6,8 @@
 
 #include "basic_path_tracer/basic_path_tracer.h"
 
+#include "engine/camera.h"
+
 #include "graphics/cuda_util.h"
 #include "graphics/cuda_texture2d.h"
 #include "graphics/d3d_texture2d.h"
@@ -16,20 +18,18 @@
 #include <DirectXColors.h>
 
 
-void RenderFrame(void *buffer, uint width, uint height, size_t pitch, float t);
+void RenderFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera &camera, uint frameNumber);
 
 
 namespace BasicPathTracer {
 
 void BasicPathTracer::DrawFrame() {
-	static float t = 0.0f;
-
 	// Map the resources
 	cudaGraphicsResource *resource = m_hdrTextureCuda->GetCurrentGraphicsResource();
 	CE(cudaGraphicsMapResources(1, &resource));
 
-	// Run the kernel 
-	RenderFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), t);
+	// Run the kernel
+	RenderFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), m_hostCamera.GetDeviceCamera(), m_frameNumber++);
 
 	// Copy the frame over to the d3d texture
 	m_hdrTextureCuda->CopyTextureDataToRegisteredResource();
@@ -48,8 +48,6 @@ void BasicPathTracer::DrawFrame() {
 	m_immediateContext->Draw(3u, 0u);
 
 	m_swapChain->Present(1u, 0u);
-
-	t += 0.1f;
 }
 
 } // End of namespace DirectXInterop

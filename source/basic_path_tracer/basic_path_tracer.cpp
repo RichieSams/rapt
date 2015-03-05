@@ -17,7 +17,9 @@ namespace BasicPathTracer {
 
 BasicPathTracer::BasicPathTracer(HINSTANCE hinstance) 
 	: Engine::RAICEngine(hinstance),
-	  m_backbufferRTV(nullptr) {
+	  m_backbufferRTV(nullptr),
+	  m_hostCamera(0.0f, DirectX::XM_PIDIV2, 10.0f),
+	  m_frameNumber(0u) {
 }
 
 bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen) {
@@ -46,6 +48,9 @@ void BasicPathTracer::OnResize() {
 	if (!m_d3dInitialized) {
 		return;
 	}
+
+	// Update the camera projection
+	m_hostCamera.SetProjection(DirectX::XM_PIDIV2, (float)m_clientWidth / m_clientHeight);
 
 	// Release the old views and the old depth/stencil buffer.
 	ReleaseCOM(m_backbufferRTV);

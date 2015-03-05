@@ -39,9 +39,15 @@
     <ClInclude Include="..\..\source\basic_path_tracer\basic_path_tracer.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\basic_path_tracer\path_trace.cuh">
+      <Filter>CUDA Kernels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="..\..\source\basic_path_tracer\draw_frame.cu">
+    <CudaCompile Include="..\..\source\basic_path_tracer\cuda_kernel_call_wrapper.cu">
+      <Filter>CUDA Kernels</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\..\source\basic_path_tracer\path_trace.cu">
       <Filter>CUDA Kernels</Filter>
     </CudaCompile>
   </ItemGroup>
