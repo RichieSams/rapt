@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\source\common\file_io_util.h" />
     <ClInclude Include="..\..\source\common\sys_headers.h" />
     <ClInclude Include="..\..\source\common\typedefs.h" />
+    <ClInclude Include="..\..\source\engine\camera.h" />
     <ClInclude Include="..\..\source\engine\clock.h" />
     <ClInclude Include="..\..\source\engine\raic_engine.h" />
     <ClInclude Include="..\..\source\graphics\cuda_texture2d.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\common\file_io_util.cpp" />
+    <ClCompile Include="..\..\source\engine\camera.cpp" />
     <ClCompile Include="..\..\source\engine\clock.cpp" />
     <ClCompile Include="..\..\source\engine\raic_engine.cpp" />
     <ClCompile Include="..\..\source\graphics\cuda_util.cpp" />

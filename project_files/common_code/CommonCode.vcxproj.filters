@@ -42,6 +42,9 @@
     <ClInclude Include="..\..\source\graphics\d3d_texture2d.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\engine\camera.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\clock.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graphics\cuda_texture2d.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\engine\camera.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
