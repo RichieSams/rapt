@@ -36,6 +36,14 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	Graphics::LoadVertexShader(L"fullscreen_triangle_vs.cso", m_device, &m_fullscreenTriangleVS);
 	Graphics::LoadPixelShader(L"copy_cuda_output_to_backbuffer_ps.cso", m_device, &m_copyCudaOutputToBackbufferPS);
 
+	// Bind the shaders and SRV to the pipeline
+	// We never bind anything else, so we can just do it once during initialization
+	m_immediateContext->VSSetShader(m_fullscreenTriangleVS, nullptr, 0u);
+	m_immediateContext->PSSetShader(m_copyCudaOutputToBackbufferPS, nullptr, 0u);
+
+	ID3D11ShaderResourceView *hdrSRV = m_hdrTextureD3D->GetShaderResource();
+	m_immediateContext->PSSetShaderResources(0, 1, &hdrSRV);
+
 	return true;
 }
 

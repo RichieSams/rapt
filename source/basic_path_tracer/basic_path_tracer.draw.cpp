@@ -39,11 +39,7 @@ void BasicPathTracer::DrawFrame() {
 
 
 	// Draw the frame to the screen
-	m_immediateContext->VSSetShader(m_fullscreenTriangleVS, nullptr, 0u);
-	m_immediateContext->PSSetShader(m_copyCudaOutputToBackbufferPS, nullptr, 0u);
 
-	ID3D11ShaderResourceView *hdrSRV = m_hdrTextureD3D->GetShaderResource();
-	m_immediateContext->PSSetShaderResources(0, 1, &hdrSRV);
 
 	m_immediateContext->Draw(3u, 0u);
 
