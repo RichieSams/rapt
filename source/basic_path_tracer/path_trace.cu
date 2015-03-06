@@ -13,8 +13,8 @@
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera) {
 	float3 viewVector = make_float3((((x + 0.5f /*TODO: Add jitter */) / width) * 2.0f - 1.0f) * camera.tanFovDiv2_X,
-	                                (((y + 0.5f /*TODO: Add jitter */) / height) * 2.0f - 1.0f) * camera.tanFovDiv2_Y,
-	                                -1.0f);
+	                                -(((y + 0.5f /*TODO: Add jitter */) / height) * 2.0f - 1.0f) * camera.tanFovDiv2_Y,
+	                                1.0f);
 
 	// Matrix multiply
 	return normalize(make_float3(dot(viewVector, camera.x),

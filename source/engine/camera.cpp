@@ -13,6 +13,7 @@
 #include "engine/camera.h"
 
 #include <algorithm>
+#include <DirectXMath.h>
 
 #define PI 3.141592654f
 #define TWO_PI 6.283185307f
@@ -60,10 +61,10 @@ void HostCamera::Pan(float dx, float dy) {
 	float3 look = normalize(m_target - GetCameraPosition());
 	float3 worldUp = make_float3(0.0f, m_up, 0.0f);
 
-	float3 left = normalize(cross(look, worldUp));
-	float3 up = normalize(cross(look, left));
+	float3 right = normalize(cross(worldUp, look));
+	float3 up = cross(look, right);
 
-	m_target += -(left * dx) + (up * dy);
+	m_target += (right * dx) + (up * dy);
 }
 
 DeviceCamera HostCamera::GetDeviceCamera() const {
@@ -71,11 +72,13 @@ DeviceCamera HostCamera::GetDeviceCamera() const {
 
 	DeviceCamera camera;
 	camera.origin = GetCameraPosition();
+	
 	camera.z = normalize(m_target - camera.origin);
+	camera.x = normalize(cross(worldUp, camera.z));
+	camera.y = cross(camera.z, camera.x);
+
 	camera.tanFovDiv2_X = m_tanFovDiv2_X;
-	camera.x = normalize(cross(camera.z, worldUp));
 	camera.tanFovDiv2_Y = m_tanFovDiv2_Y;
-	camera.y = normalize(cross(camera.z, camera.x));
 
 	return camera;
 }
