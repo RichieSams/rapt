@@ -37,7 +37,7 @@ __global__ void RayTrace(unsigned char *textureData, uint width, uint height, si
 	curandState randState;
 	curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
 
-	//// Calculate the first ray for this pixel
+	// Calculate the first ray for this pixel
 	//float3 ray = CalculateRayDirectionFromPixel(x, y, width, height, camera);
 
 	// Generate a uniform random number
@@ -48,9 +48,21 @@ __global__ void RayTrace(unsigned char *textureData, uint width, uint height, si
 
 	if (x < width && y < height) {
 		// Write out pixel data
-		pixel[0] = randNum;
-		pixel[1] = randNum;
-		pixel[2] = randNum;
-		pixel[3] = 1.0f;
+		if (randNum < 0.33f) {
+			pixel[0] += 1.0f;
+			pixel[1] += 0.0f;
+			pixel[2] += 0.0f;
+			pixel[3] = 1.0f;
+		} else if (randNum < 0.66f) {
+			pixel[0] += 0.0f;
+			pixel[1] += 1.0f;
+			pixel[2] += 0.0f;
+			pixel[3] = 1.0f;
+		} else {
+			pixel[0] += 0.0f;
+			pixel[1] += 0.0f;
+			pixel[2] += 1.0f;
+			pixel[3] = 1.0f;
+		}
 	}
 }

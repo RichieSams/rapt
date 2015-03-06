@@ -30,6 +30,7 @@ private:
 
 	ID3D11VertexShader *m_fullscreenTriangleVS;
 	ID3D11PixelShader *m_copyCudaOutputToBackbufferPS;
+	ID3D11Buffer *m_copyCudaOutputPSConstantBuffer;
 
 	Engine::HostCamera m_hostCamera;
 

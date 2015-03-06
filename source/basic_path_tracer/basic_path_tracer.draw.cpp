@@ -11,6 +11,7 @@
 #include "graphics/cuda_util.h"
 #include "graphics/cuda_texture2d.h"
 #include "graphics/d3d_texture2d.h"
+#include "graphics/d3d_util.h"
 
 #include <cuda_runtime.h>
 #include <cuda_d3d11_interop.h>
@@ -38,9 +39,19 @@ void BasicPathTracer::DrawFrame() {
 	CE(cudaGraphicsUnmapResources(1, &resource));
 
 
+	// Write the constant buffer data
+	float invFrameCount = 1.0f / m_frameNumber;
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	// Lock the constant buffer so it can be written to.
+	HR(m_immediateContext->Map(m_copyCudaOutputPSConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+	memcpy(mappedResource.pData, &invFrameCount, sizeof(float));
+	m_immediateContext->Unmap(m_copyCudaOutputPSConstantBuffer, 0);
+
+	m_immediateContext->PSSetConstantBuffers(0u, 1u, &m_copyCudaOutputPSConstantBuffer);
+
 	// Draw the frame to the screen
-
-
 	m_immediateContext->Draw(3u, 0u);
 
 	m_swapChain->Present(1u, 0u);
