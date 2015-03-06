@@ -6,8 +6,6 @@
 
 #include "graphics/cuda_texture2d.h"
 
-#include "graphics/cuda_util.h"
-
 #include <cassert>
 
 #include <cuda_runtime.h>

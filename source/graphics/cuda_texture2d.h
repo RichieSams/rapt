@@ -8,6 +8,8 @@
 
 #include "common/typedefs.h"
 
+#include "graphics/cuda_util.h"
+
 #include <cuda_runtime.h>
 
 
@@ -34,6 +36,8 @@ private:
 public:
 	void RegisterResource(ID3D11Resource *d3dResource, cudaGraphicsRegisterFlags flags);
 	void CopyTextureDataToRegisteredResource();
+
+	inline void MemSet(int value) { CE(cudaMemset(m_textureData, value, m_texturePitch * m_height)); }
 
 	inline void *GetTextureData() { return m_textureData; }
 	inline size_t GetTexturePitch() { return m_texturePitch; }
