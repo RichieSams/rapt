@@ -18,7 +18,7 @@ namespace BasicPathTracer {
 BasicPathTracer::BasicPathTracer(HINSTANCE hinstance) 
 	: Engine::RAICEngine(hinstance),
 	  m_backbufferRTV(nullptr),
-	  m_hostCamera(0.0f, DirectX::XM_PIDIV2, 10.0f),
+	  m_hostCamera(0.0f, -DirectX::XM_PIDIV2, 10.0f),
 	  m_frameNumber(0u) {
 }
 
