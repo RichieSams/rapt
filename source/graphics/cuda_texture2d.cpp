@@ -22,7 +22,6 @@ CudaTexture2D::CudaTexture2D(uint width, uint height, uint bytesPerPixel)
 		  m_bytesPerPixel(bytesPerPixel),
 		  m_graphicsResource(nullptr) {
 	CE(cudaMallocPitch(&m_textureData, &m_texturePitch, width * bytesPerPixel, height));
-	CE(cudaMemset(m_textureData, 0xCC, m_texturePitch * height));
 }
 
 CudaTexture2D::~CudaTexture2D() {
