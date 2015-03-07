@@ -1,6 +1,6 @@
-/* raic - RichieSam's Adventures in Cuda
+/* rapt - RichieSam's Adventures in Path Tracing
  *
- * raic is the legal property of Adrian Astley
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 
@@ -16,7 +16,7 @@
 namespace BasicPathTracer {
 
 BasicPathTracer::BasicPathTracer(HINSTANCE hinstance) 
-	: Engine::RAICEngine(hinstance),
+	: Engine::RAPTEngine(hinstance),
 	  m_backbufferRTV(nullptr),
 	  m_hostCamera(0.0f, -DirectX::XM_PIDIV2, 10.0f),
 	  m_frameNumber(0u) {
@@ -24,7 +24,7 @@ BasicPathTracer::BasicPathTracer(HINSTANCE hinstance)
 
 bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen) {
 	// Initialize the Engine
-	if (!Engine::RAICEngine::Initialize(mainWndCaption, screenWidth, screenHeight, fullscreen)) {
+	if (!Engine::RAPTEngine::Initialize(mainWndCaption, screenWidth, screenHeight, fullscreen)) {
 		return false;
 	}
 
@@ -61,7 +61,7 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 void BasicPathTracer::Shutdown() {
 	// Release in the opposite order we initialized in
 
-	Engine::RAICEngine::Shutdown();
+	Engine::RAPTEngine::Shutdown();
 }
 
 void BasicPathTracer::OnResize() {

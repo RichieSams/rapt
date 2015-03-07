@@ -1,12 +1,12 @@
-/* raic - RichieSam's Adventures in Cuda
+/* rapt - RichieSam's Adventures in Path Tracing
  *
- * raic is the legal property of Adrian Astley
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 
 #pragma once
 
-#include "engine/raic_engine.h"
+#include "engine/rapt_engine.h"
 #include "engine/camera.h"
 
 
@@ -17,7 +17,7 @@ class CudaTexture2D;
 
 namespace BasicPathTracer {
 
-class BasicPathTracer : public Engine::RAICEngine {
+class BasicPathTracer : public Engine::RAPTEngine {
 public:
 	BasicPathTracer(HINSTANCE hinstance);
 

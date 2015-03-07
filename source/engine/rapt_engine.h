@@ -5,8 +5,8 @@
  */
 
 /**
- * Modified for use in raic - RichieSam's Adventures in Cuda
- * raic is the legal property of Adrian Astley
+ * Modified for use in rapt - RichieSam's Adventures in Path Tracing
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 
@@ -21,10 +21,10 @@
 
 namespace Engine {
 
-class RAICEngine {
+class RAPTEngine {
 public:
-	RAICEngine(HINSTANCE hinstance);
-	~RAICEngine();
+	RAPTEngine(HINSTANCE hinstance);
+	~RAPTEngine();
 
 private:
 	LPCTSTR m_mainWndCaption;
@@ -165,4 +165,4 @@ private:
 // This is used to forward Windows messages from a global window
 // procedure to our member function window procedure because we cannot
 // assign a member function to WNDCLASS::lpfnWndProc.
-static Engine::RAICEngine *g_engine = NULL;
+static Engine::RAPTEngine *g_engine = NULL;

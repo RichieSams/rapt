@@ -24,9 +24,6 @@
     <ClInclude Include="..\..\source\engine\clock.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\engine\raic_engine.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\graphics\dxerr.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -48,12 +45,12 @@
     <ClInclude Include="..\..\source\engine\camera.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\engine\rapt_engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\clock.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\engine\raic_engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\graphics\dxerr.cpp">
@@ -75,6 +72,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\engine\camera.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\engine\rapt_engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

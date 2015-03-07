@@ -19,8 +19,8 @@
  */
 
 /**
- * Modified for use in raic - RichieSam's Adventures in Cuda
- * raic is the legal property of Adrian Astley
+ * Modified for use in rapt - RichieSam's Adventures in Path Tracing
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 

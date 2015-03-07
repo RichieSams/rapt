@@ -1,10 +1,10 @@
-/* raic - RichieSam's Adventures in Cuda
+/* rapt - RichieSam's Adventures in Path Tracing
  *
- * raic is the legal property of Adrian Astley
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 
-#include "engine/raic_engine.h"
+#include "engine/rapt_engine.h"
 
 #include "graphics/d3d_util.h"
 
@@ -13,12 +13,12 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	return g_engine->MsgProc(hwnd, msg, wParam, lParam);
 }
 
-#define WINDOW_CLASS_NAME L"RAICEngineWindow"
+#define WINDOW_CLASS_NAME L"raptEngineWindow"
 
 
 namespace Engine {
 
-RAICEngine::RAICEngine(HINSTANCE hinstance)
+RAPTEngine::RAPTEngine(HINSTANCE hinstance)
 		: m_hinstance(hinstance),
 		  m_mainWndCaption(WINDOW_CLASS_NAME),
 		  m_appPaused(false),
@@ -34,11 +34,11 @@ RAICEngine::RAICEngine(HINSTANCE hinstance)
 	g_engine = this;
 }
 
-RAICEngine::~RAICEngine() {
+RAPTEngine::~RAPTEngine() {
 	g_engine = nullptr;
 }
 
-bool RAICEngine::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen) {
+bool RAPTEngine::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen) {
 	m_mainWndCaption = mainWndCaption;
 	m_clientWidth = screenWidth;
 	m_clientHeight = screenHeight;
@@ -113,7 +113,7 @@ bool RAICEngine::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 s
 	return true;
 }
 
-void RAICEngine::Shutdown() {
+void RAPTEngine::Shutdown() {
 	// Shutdown in reverse order
 	ReleaseCOM(m_swapChain);
 
@@ -131,7 +131,7 @@ void RAICEngine::Shutdown() {
 	g_engine = nullptr;
 }
 
-void RAICEngine::Run() {
+void RAPTEngine::Run() {
 	MSG msg;
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -163,7 +163,7 @@ void RAICEngine::Run() {
 	return;
 }
 
-LRESULT RAICEngine::MsgProc(HWND hwnd, uint msg, WPARAM wParam, LPARAM lParam) {
+LRESULT RAPTEngine::MsgProc(HWND hwnd, uint msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		// WM_SIZE is sent when the user resizes the window.
 	case WM_SIZE:
@@ -250,7 +250,7 @@ LRESULT RAICEngine::MsgProc(HWND hwnd, uint msg, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-void RAICEngine::InitializeWindow() {
+void RAPTEngine::InitializeWindow() {
 	WNDCLASS wc;
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = MainWndProc;
@@ -312,7 +312,7 @@ void RAICEngine::InitializeWindow() {
 	return;
 }
 
-void RAICEngine::ShutdownWindow() {
+void RAPTEngine::ShutdownWindow() {
 	// Show the mouse cursor.
 	//ShowCursor(true);
 

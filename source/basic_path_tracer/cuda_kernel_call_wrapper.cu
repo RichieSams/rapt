@@ -1,6 +1,6 @@
-/* raic - RichieSam's Adventures in Cuda
+/* rapt - RichieSam's Adventures in Path Tracing
  *
- * raic is the legal property of Adrian Astley
+ * rapt is the legal property of Adrian Astley
  * Copyright Adrian Astley 2015
  */
 

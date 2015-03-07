@@ -1,2 +1,2 @@
-# raic
-RichieSam's Adventures in Cuda
+# rapt
+RichieSam's Adventures in Path Tracing
