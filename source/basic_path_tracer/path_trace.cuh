@@ -12,4 +12,4 @@
 #include <vector_types.h>
 
 
-__global__ void RayTrace(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera camera, uint hashedFrameNumber);
+__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera camera, uint hashedFrameNumber);

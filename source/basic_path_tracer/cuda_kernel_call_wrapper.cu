@@ -16,13 +16,13 @@ uint32 WangHash(uint32 a) {
     return a;
 }
 
-void RenderFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera &camera, uint frameNumber) {
+void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera &camera, uint frameNumber) {
 	cudaError_t error = cudaSuccess;
 
 	dim3 Db = dim3(16, 16);   // block dimensions are fixed to be 256 threads
 	dim3 Dg = dim3((width + Db.x - 1) / Db.x, (height + Db.y - 1) / Db.y);
 
-	RayTrace<<<Dg, Db>>>((unsigned char *)buffer, width, height, pitch, camera, WangHash(frameNumber));
+	PathTraceKernel<<<Dg, Db>>>((unsigned char *)buffer, width, height, pitch, camera, WangHash(frameNumber));
 
 	error = cudaGetLastError();
 	if (error != cudaSuccess) {

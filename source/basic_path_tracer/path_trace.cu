@@ -22,7 +22,7 @@ __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uin
 	                             dot(viewVector, camera.z)));
 }
 
-__global__ void RayTrace(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera camera, uint hashedFrameNumber) {
+__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera camera, uint hashedFrameNumber) {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
 
