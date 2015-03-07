@@ -70,4 +70,4 @@ void BasicPathTracer::DrawFrame() {
 	m_swapChain->Present(1u, 0u);
 }
 
-} // End of namespace DirectXInterop
+} // End of namespace BasicPathTracer

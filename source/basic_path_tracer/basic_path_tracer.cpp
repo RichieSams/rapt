@@ -100,4 +100,4 @@ void BasicPathTracer::OnResize() {
 
 
 
-} // End of namespace DirectXInterop
+} // End of namespace BasicPathTracer

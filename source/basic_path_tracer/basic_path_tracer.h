@@ -45,4 +45,4 @@ private:
 	void DrawFrame();
 };
 
-} // End of namespace DirectXInterop
+} // End of namespace BasicPathTracer
