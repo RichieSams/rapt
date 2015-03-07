@@ -9,6 +9,7 @@
 #include <device_launch_parameters.h>
 #include <graphics/helper_math.h>
 #include <curand_kernel.h>
+#include <vector_types.h>
 
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera) {
