@@ -88,6 +88,15 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 
 void BasicPathTracer::Shutdown() {
 	// Release in the opposite order we initialized in
+	cudaFree(d_deviceCamera);
+	cudaFree(d_spheres);
+
+	ReleaseCOM(m_copyCudaOutputPSConstantBuffer);
+	ReleaseCOM(m_copyCudaOutputToBackbufferPS);
+	ReleaseCOM(m_fullscreenTriangleVS);
+	
+	delete m_hdrTextureCuda;
+	delete m_hdrTextureD3D;
 
 	Engine::RAPTEngine::Shutdown();
 }
