@@ -10,6 +10,10 @@
 #include "engine/camera.h"
 
 
+namespace Scene {
+struct Sphere;
+}
+
 namespace Graphics {
 class D3DTexture2D;
 class CudaTexture2D;
@@ -35,6 +39,10 @@ private:
 	Engine::HostCamera m_hostCamera;
 
 	uint m_frameNumber;
+
+	// CUDA device variables
+	Scene::Sphere *d_spheres;
+	uint m_numSpheres;
 
 public:
 	bool Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen);

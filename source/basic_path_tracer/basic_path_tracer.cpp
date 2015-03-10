@@ -10,6 +10,8 @@
 #include "graphics/d3d_texture2d.h"
 #include "graphics/cuda_texture2d.h"
 
+#include "scene/scene_objects.h"
+
 #include <cuda_runtime.h>
 
 
@@ -56,6 +58,20 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	m_immediateContext->PSSetShaderResources(0, 1, &hdrSRV);
 
 	m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Create the scene
+	// TODO: Use a scene description file rather than hard code the scene
+	// (Can probably steal the format used by The Halfling Engine)
+	Scene::Sphere spheres[5];
+	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f};
+	spheres[1] = {make_float3(-4.0f, 0.0f, 0.0f), 4.0f};
+	spheres[2] = {make_float3(-8.0f, 0.0f, 0.0f), 4.0f};
+	spheres[3] = {make_float3(4.0f, 0.0f, 0.0f), 4.0f};
+	spheres[4] = {make_float3(8.0f, 0.0f, 0.0f), 4.0f};
+
+	CE(cudaMalloc(&d_spheres, 5 * sizeof(Scene::Sphere)));
+	CE(cudaMemcpy(d_spheres, &spheres, 5 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
+	m_numSpheres = 5;
 
 	return true;
 }
