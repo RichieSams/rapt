@@ -55,6 +55,8 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	ID3D11ShaderResourceView *hdrSRV = m_hdrTextureD3D->GetShaderResource();
 	m_immediateContext->PSSetShaderResources(0, 1, &hdrSRV);
 
+	m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	return true;
 }
 
