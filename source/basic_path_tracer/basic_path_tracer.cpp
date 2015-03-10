@@ -154,6 +154,9 @@ void BasicPathTracer::MouseMove(WPARAM buttonState, int x, int y) {
 			float dTheta = ((float)(m_mouseLastPos_X - x) / 300);
 
 			m_hostCamera.Rotate(-dTheta, dPhi);
+
+			ResetAccumulationBuffer();
+			m_cameraMoved = true;
 		}
 	} else if ((buttonState & MK_MBUTTON) != 0) {
 		if (GetKeyState(VK_MENU) & 0x8000) {
@@ -161,14 +164,14 @@ void BasicPathTracer::MouseMove(WPARAM buttonState, int x, int y) {
 			float dy = ((float)(m_mouseLastPos_Y - y));
 
 			m_hostCamera.Pan(dx * 0.1f, -dy * 0.1f);
+
+			ResetAccumulationBuffer();
+			m_cameraMoved = true;
 		}
 	}
 
 	m_mouseLastPos_X = x;
 	m_mouseLastPos_Y = y;
-
-	ResetAccumulationBuffer();
-	m_cameraMoved = true;
 }
 
 void BasicPathTracer::MouseWheel(int zDelta) {
