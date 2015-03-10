@@ -16,15 +16,15 @@
 #include <float.h>
 
 
-__device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera *camera) {
-	float3 viewVector = make_float3((((x + 0.5f /*TODO: Add jitter */) / width) * 2.0f - 1.0f) * camera->TanFovDiv2_X,
-	                                -(((y + 0.5f /*TODO: Add jitter */) / height) * 2.0f - 1.0f) * camera->TanFovDiv2_Y,
+__device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera) {
+	float3 viewVector = make_float3((((x + 0.5f /*TODO: Add jitter */) / width) * 2.0f - 1.0f) * camera.TanFovDiv2_X,
+	                                -(((y + 0.5f /*TODO: Add jitter */) / height) * 2.0f - 1.0f) * camera.TanFovDiv2_Y,
 	                                1.0f);
 
 	// Matrix multiply
-	return normalize(make_float3(dot(viewVector, camera->ViewToWorldMatrixR0),
-	                             dot(viewVector, camera->ViewToWorldMatrixR1),
-	                             dot(viewVector, camera->ViewToWorldMatrixR2)));
+	return normalize(make_float3(dot(viewVector, camera.ViewToWorldMatrixR0),
+	                             dot(viewVector, camera.ViewToWorldMatrixR1),
+	                             dot(viewVector, camera.ViewToWorldMatrixR2)));
 }
 
 /**
@@ -81,9 +81,12 @@ __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &spher
 	return nearestIntersection;
 }
 
-__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, uint hashedFrameNumber) {
+__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::Sphere *g_spheres, uint numSpheres, uint hashedFrameNumber) {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
+
+	// Create a local copy of the camera
+	DeviceCamera camera = *g_camera;
 
 	// Global threadId
 	int threadId = (blockIdx.x + blockIdx.y * gridDim.x) * (blockDim.x * blockDim.y) + (threadIdx.y * blockDim.x) + threadIdx.x;
@@ -93,7 +96,7 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	//curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
 
 	// Calculate the first ray for this pixel
-	Scene::Ray ray = {camera->Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera)};
+	Scene::Ray ray = {camera.Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera)};
 
 	// Generate a uniform random number
 	//float randNum = curand_uniform(&randState);
@@ -103,7 +106,7 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	float3 normal;
 	for (uint i = 0; i < numSpheres; ++i) {
 		float3 newNormal;
-		float intersection = TestRaySphereIntersection(ray, spheres[i], newNormal);
+		float intersection = TestRaySphereIntersection(ray, g_spheres[i], newNormal);
 		if (intersection > 0.0f && intersection < closestIntersection) {
 			closestIntersection = intersection;
 			normal = newNormal;
