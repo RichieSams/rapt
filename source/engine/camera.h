@@ -92,7 +92,7 @@ public:
 
 	inline void SetProjection(float fov, float aspectRatio) {
 		m_tanFovDiv2_X = tan(fov * 0.5f);
-		m_tanFovDiv2_Y = tan(fov * 0.5f / aspectRatio);
+		m_tanFovDiv2_Y = tan(fov * 0.5f) / aspectRatio;
 	}
 
 	/**
