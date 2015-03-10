@@ -20,7 +20,7 @@ uint32 WangHash(uint32 a) {
     return a;
 }
 
-void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera &camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber) {
+void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber) {
 	cudaError_t error = cudaSuccess;
 
 	dim3 Db = dim3(16, 16);   // block dimensions are fixed to be 256 threads

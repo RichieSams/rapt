@@ -39,12 +39,14 @@ private:
 	Engine::HostCamera m_hostCamera;
 	int m_mouseLastPos_X;
 	int m_mouseLastPos_Y;
+	bool m_cameraMoved;
 
 	uint m_frameNumber;
 
 	// CUDA device variables
 	Scene::Sphere *d_spheres;
 	uint m_numSpheres;
+	DeviceCamera *d_deviceCamera;
 
 public:
 	bool Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen);

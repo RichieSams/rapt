@@ -19,14 +19,19 @@
 #include <DirectXColors.h>
 
 
-void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera &camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber);
+void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber);
 
 
 namespace BasicPathTracer {
 
 void BasicPathTracer::DrawFrame() {
+	if (m_cameraMoved) {
+		m_hostCamera.SetDeviceCamera(d_deviceCamera);
+		m_cameraMoved = false;
+	}
+
 	// Render the next frame using a CUDA kernel
-	PathTraceNextFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), m_hostCamera.GetDeviceCamera(), d_spheres, m_numSpheres, m_frameNumber++);
+	PathTraceNextFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), d_deviceCamera, d_spheres, m_numSpheres, m_frameNumber++);
 
 
 	////////////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,9 @@ BasicPathTracer::BasicPathTracer(HINSTANCE hinstance)
 	: Engine::RAPTEngine(hinstance),
 	  m_backbufferRTV(nullptr),
 	  m_hostCamera(0.0f, -DirectX::XM_PIDIV2, 10.0f),
+	  m_mouseLastPos_X(0),
+	  m_mouseLastPos_Y(0),
+	  m_cameraMoved(true),
 	  m_frameNumber(0u) {
 }
 
@@ -77,6 +80,8 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	CE(cudaMalloc(&d_spheres, 9 * sizeof(Scene::Sphere)));
 	CE(cudaMemcpy(d_spheres, &spheres, 9 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
 	m_numSpheres = 9;
+
+	CE(cudaMalloc(&d_deviceCamera, sizeof(DeviceCamera)));
 
 	return true;
 }
@@ -154,12 +159,14 @@ void BasicPathTracer::MouseMove(WPARAM buttonState, int x, int y) {
 	m_mouseLastPos_Y = y;
 
 	ResetAccumulationBuffer();
+	m_cameraMoved = true;
 }
 
 void BasicPathTracer::MouseWheel(int zDelta) {
 	m_hostCamera.Zoom((float)zDelta * 0.01f);
 
 	ResetAccumulationBuffer();
+	m_cameraMoved = true;
 }
 
 void BasicPathTracer::ResetAccumulationBuffer() {

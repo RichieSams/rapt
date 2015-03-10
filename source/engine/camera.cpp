@@ -13,7 +13,8 @@
 #include "engine/camera.h"
 
 #include <algorithm>
-#include <DirectXMath.h>
+
+#include <graphics/cuda_util.h>
 
 #define PI 3.141592654f
 #define TWO_PI 6.283185307f
@@ -67,20 +68,26 @@ void HostCamera::Pan(float dx, float dy) {
 	m_target += (right * dx) + (up * dy);
 }
 
-DeviceCamera HostCamera::GetDeviceCamera() const {
+void HostCamera::SetDeviceCamera(DeviceCamera *deviceCamera) const {
 	float3 worldUp = make_float3(0.0f, m_up, 0.0f);
 
-	DeviceCamera camera;
-	camera.Origin = GetCameraPosition();
+	float3 origin = GetCameraPosition();
 	
-	camera.Z = normalize(m_target - camera.Origin);
-	camera.X = normalize(cross(worldUp, camera.Z));
-	camera.Y = cross(camera.Z, camera.X);
+	float3 zAxis = normalize(m_target - origin);
+	float3 xAxis = normalize(cross(worldUp,zAxis));
+	float3 yAxis = cross(zAxis, xAxis);
+
+	DeviceCamera camera;
+	camera.ViewToWorldMatrixR0 = make_float3(xAxis.x, yAxis.x, zAxis.x);
+	camera.ViewToWorldMatrixR1 = make_float3(xAxis.y, yAxis.y, zAxis.y);
+	camera.ViewToWorldMatrixR2 = make_float3(xAxis.z, yAxis.z, zAxis.z);
+
+	camera.Origin = origin;
 
 	camera.TanFovDiv2_X = m_tanFovDiv2_X;
 	camera.TanFovDiv2_Y = m_tanFovDiv2_Y;
 
-	return camera;
+	CE(cudaMemcpy(deviceCamera, &camera, sizeof(DeviceCamera), cudaMemcpyHostToDevice));
 }
 
 } // End of namespace Scene

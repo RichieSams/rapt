@@ -16,12 +16,14 @@
 
 
 struct DeviceCamera {
-	float3 X;
-	float TanFovDiv2_X;
-	float3 Y;
-	float TanFovDiv2_Y;
-	float3 Z;
+	float3 ViewToWorldMatrixR0;
+	float3 ViewToWorldMatrixR1;
+	float3 ViewToWorldMatrixR2;
+	
 	float3 Origin;
+
+	float TanFovDiv2_X;
+	float TanFovDiv2_Y;
 };
 
 namespace Engine {
@@ -108,7 +110,7 @@ public:
 		return m_target + make_float3(x, y, z);
 	}
 
-	DeviceCamera GetDeviceCamera() const;
+	void SetDeviceCamera(DeviceCamera *deviceCamera) const;
 };
 
 } // End of namespace Scene
