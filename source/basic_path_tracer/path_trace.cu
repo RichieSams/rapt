@@ -16,9 +16,9 @@
 #include <float.h>
 
 
-__device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera) {
-	float3 viewVector = make_float3((((x + 0.5f /*TODO: Add jitter */) / width) * 2.0f - 1.0f) * camera.TanFovDiv2_X,
-	                                -(((y + 0.5f /*TODO: Add jitter */) / height) * 2.0f - 1.0f) * camera.TanFovDiv2_Y,
+__device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera, curandState *randState) {
+	float3 viewVector = make_float3((((x + curand_uniform(randState)) / width) * 2.0f - 1.0f) * camera.TanFovDiv2_X,
+	                                -(((y + curand_uniform(randState)) / height) * 2.0f - 1.0f) * camera.TanFovDiv2_Y,
 	                                1.0f);
 
 	// Matrix multiply
@@ -92,11 +92,11 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	int threadId = (blockIdx.x + blockIdx.y * gridDim.x) * (blockDim.x * blockDim.y) + (threadIdx.y * blockDim.x) + threadIdx.x;
 
 	// Create random number generator
-	//curandState randState;
-	//curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
+	curandState randState;
+	curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
 
 	// Calculate the first ray for this pixel
-	Scene::Ray ray = {camera.Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera)};
+	Scene::Ray ray = {camera.Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera, &randState)};
 
 	// Generate a uniform random number
 	//float randNum = curand_uniform(&randState);
