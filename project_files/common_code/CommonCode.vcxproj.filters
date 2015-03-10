@@ -10,6 +10,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{7a5da5df-7ca2-4c1b-974f-37d285939c7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{e7cd629c-3183-479c-a888-1c20d2c6580b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\common\sys_headers.h">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\engine\rapt_engine.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scene\scene_objects.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
