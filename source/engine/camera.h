@@ -16,12 +16,12 @@
 
 
 struct DeviceCamera {
-	float3 x;
-	float tanFovDiv2_X;
-	float3 y;
-	float tanFovDiv2_Y;
-	float3 z;
-	float3 origin;
+	float3 X;
+	float TanFovDiv2_X;
+	float3 Y;
+	float TanFovDiv2_Y;
+	float3 Z;
+	float3 Origin;
 };
 
 namespace Engine {

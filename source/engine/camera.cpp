@@ -71,14 +71,14 @@ DeviceCamera HostCamera::GetDeviceCamera() const {
 	float3 worldUp = make_float3(0.0f, m_up, 0.0f);
 
 	DeviceCamera camera;
-	camera.origin = GetCameraPosition();
+	camera.Origin = GetCameraPosition();
 	
-	camera.z = normalize(m_target - camera.origin);
-	camera.x = normalize(cross(worldUp, camera.z));
-	camera.y = cross(camera.z, camera.x);
+	camera.Z = normalize(m_target - camera.Origin);
+	camera.X = normalize(cross(worldUp, camera.Z));
+	camera.Y = cross(camera.Z, camera.X);
 
-	camera.tanFovDiv2_X = m_tanFovDiv2_X;
-	camera.tanFovDiv2_Y = m_tanFovDiv2_Y;
+	camera.TanFovDiv2_X = m_tanFovDiv2_X;
+	camera.TanFovDiv2_Y = m_tanFovDiv2_Y;
 
 	return camera;
 }
