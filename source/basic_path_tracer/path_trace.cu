@@ -119,5 +119,6 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 			pixel[1] += pixelColor;
 			pixel[2] += pixelColor;
 			// Ignore alpha, since it's hardcoded to 1.0f in the display
+			// We have to use a RGBA format since CUDA-DirectX interop doesn't support R32G32B32_FLOAT
 	}
 }

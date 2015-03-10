@@ -30,8 +30,9 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 		return false;
 	}
 
+	// We have to use a RGBA format since CUDA-DirectX interop doesn't support R32G32B32_FLOAT
 	m_hdrTextureD3D = new Graphics::D3DTexture2D(m_device, screenWidth, screenHeight, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_SHADER_RESOURCE, 1);
-	m_hdrTextureCuda = new Graphics::CudaTexture2D(screenWidth, screenHeight, 16u);
+	m_hdrTextureCuda = new Graphics::CudaTexture2D(screenWidth, screenHeight, 4 /* RGBA */ * sizeof(float));
 	m_hdrTextureCuda->RegisterResource(m_hdrTextureD3D->GetTexture(), cudaGraphicsRegisterFlagsNone);
 	m_hdrTextureCuda->MemSet(0);
 
