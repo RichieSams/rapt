@@ -117,6 +117,50 @@ void BasicPathTracer::OnResize() {
 	m_immediateContext->RSSetViewports(1, &m_screenViewport);
 }
 
+void BasicPathTracer::MouseDown(WPARAM buttonState, int x, int y) {
+	m_mouseLastPos_X = x;
+	m_mouseLastPos_Y = y;
 
+	SetCapture(m_hwnd);
+}
+
+void BasicPathTracer::MouseUp(WPARAM buttonState, int x, int y) {
+	ReleaseCapture();
+}
+
+void BasicPathTracer::MouseMove(WPARAM buttonState, int x, int y) {
+	if ((buttonState & MK_LBUTTON) != 0) {
+		if (GetKeyState(VK_MENU) & 0x8000) {
+			// Calculate the new phi and theta based on mouse position relative to where the user clicked
+			float dPhi = ((float)(m_mouseLastPos_Y - y) / 300);
+			float dTheta = ((float)(m_mouseLastPos_X - x) / 300);
+
+			m_hostCamera.Rotate(-dTheta, dPhi);
+		}
+	} else if ((buttonState & MK_MBUTTON) != 0) {
+		if (GetKeyState(VK_MENU) & 0x8000) {
+			float dx = ((float)(m_mouseLastPos_X - x));
+			float dy = ((float)(m_mouseLastPos_Y - y));
+
+			m_hostCamera.Pan(dx * 0.1f, -dy * 0.1f);
+		}
+	}
+
+	m_mouseLastPos_X = x;
+	m_mouseLastPos_Y = y;
+
+	ResetAccumulationBuffer();
+}
+
+void BasicPathTracer::MouseWheel(int zDelta) {
+	m_hostCamera.Zoom((float)zDelta * 0.01f);
+
+	ResetAccumulationBuffer();
+}
+
+void BasicPathTracer::ResetAccumulationBuffer() {
+	m_hdrTextureCuda->MemSet(0);
+	m_frameNumber = 0u;
+}
 
 } // End of namespace BasicPathTracer

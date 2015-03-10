@@ -37,6 +37,8 @@ private:
 	ID3D11Buffer *m_copyCudaOutputPSConstantBuffer;
 
 	Engine::HostCamera m_hostCamera;
+	int m_mouseLastPos_X;
+	int m_mouseLastPos_Y;
 
 	uint m_frameNumber;
 
@@ -51,6 +53,13 @@ public:
 private:
 	void OnResize();
 	void DrawFrame();
+
+	void MouseDown(WPARAM buttonState, int x, int y);
+	void MouseUp(WPARAM buttonState, int x, int y);
+	void MouseMove(WPARAM buttonState, int x, int y);
+	void MouseWheel(int zDelta);
+
+	void ResetAccumulationBuffer();
 };
 
 } // End of namespace BasicPathTracer
