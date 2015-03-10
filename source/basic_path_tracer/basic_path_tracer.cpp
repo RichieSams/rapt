@@ -63,16 +63,20 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	// Create the scene
 	// TODO: Use a scene description file rather than hard code the scene
 	// (Can probably steal the format used by The Halfling Engine)
-	Scene::Sphere spheres[5];
+	Scene::Sphere spheres[9];
 	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f};
-	spheres[1] = {make_float3(-4.0f, 0.0f, 0.0f), 4.0f};
-	spheres[2] = {make_float3(-8.0f, 0.0f, 0.0f), 4.0f};
-	spheres[3] = {make_float3(4.0f, 0.0f, 0.0f), 4.0f};
-	spheres[4] = {make_float3(8.0f, 0.0f, 0.0f), 4.0f};
+	spheres[1] = {make_float3(-6.0f, -6.0f, -6.0f), 4.0f};
+	spheres[2] = {make_float3(-6.0f, -6.0f, 6.0f), 4.0f};
+	spheres[3] = {make_float3(-6.0f, 6.0f, -6.0f), 4.0f};
+	spheres[4] = {make_float3(-6.0f, 6.0f, 6.0f), 4.0f};
+	spheres[5] = {make_float3(6.0f, -6.0f, -6.0f), 4.0f};
+	spheres[6] = {make_float3(6.0f, -6.0f, 6.0f), 4.0f};
+	spheres[7] = {make_float3(6.0f, 6.0f, -6.0f), 4.0f};
+	spheres[8] = {make_float3(6.0f, 6.0f, 6.0f), 4.0f};
 
-	CE(cudaMalloc(&d_spheres, 5 * sizeof(Scene::Sphere)));
-	CE(cudaMemcpy(d_spheres, &spheres, 5 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
-	m_numSpheres = 5;
+	CE(cudaMalloc(&d_spheres, 9 * sizeof(Scene::Sphere)));
+	CE(cudaMemcpy(d_spheres, &spheres, 9 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
+	m_numSpheres = 9;
 
 	return true;
 }
