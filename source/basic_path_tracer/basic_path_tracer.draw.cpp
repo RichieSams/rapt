@@ -72,7 +72,7 @@ void BasicPathTracer::DrawFrame() {
 	// Draw the frame to the screen
 	m_immediateContext->Draw(3u, 0u);
 
-	m_swapChain->Present(1u, 0u);
+	m_swapChain->Present(0u, 0u);
 }
 
 } // End of namespace BasicPathTracer
