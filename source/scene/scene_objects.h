@@ -28,4 +28,16 @@ struct Plane {
 	uint MaterialId;
 };
 
+struct LambertMaterial;
+
+struct SceneObjects {
+	LambertMaterial *Materials;
+
+	Plane *Planes;
+	uint NumPlanes;
+
+	Sphere *Spheres;
+	uint NumSpheres;
+};
+
 } // End of namespace Scene

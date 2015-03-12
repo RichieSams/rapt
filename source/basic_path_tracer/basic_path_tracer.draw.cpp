@@ -14,7 +14,7 @@
 #include <cuda_d3d11_interop.h>
 
 
-void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, Scene::LambertMaterial *g_materials, uint numMaterials, uint frameNumber);
+void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::SceneObjects *sceneObjects, uint frameNumber);
 
 
 namespace BasicPathTracer {
@@ -32,7 +32,7 @@ void BasicPathTracer::DrawFrame() {
 	}
 
 	// Launch the CUDA kernel
-	PathTraceNextFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), d_deviceCamera, d_spheres, m_numSpheres, d_materials, m_numMaterials, m_frameNumber++);
+	PathTraceNextFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), d_deviceCamera, d_sceneObjects, m_frameNumber++);
 
 
 	////////////////////////////////////////////////////////////////////////////////

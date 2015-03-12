@@ -90,6 +90,24 @@ void BasicPathTracer::Shutdown() {
 void BasicPathTracer::CreateScene() {
 	// TODO: Use a scene description file rather than hard code the scene
 	// (Can probably steal the format used by The Halfling Engine)
+
+	// Create the scene and copy the data over to the GPU
+	Scene::LambertMaterial materials[4];
+	materials[0] = {make_float3(0.8f, 0.8f, 0.8f)};
+	materials[1] = {make_float3(1.0f, 0.0f, 0.0f)};
+	materials[2] = {make_float3(0.0f, 1.0f, 0.0f)};
+	materials[3] = {make_float3(0.0f, 0.0f, 1.0f)};
+
+	CE(cudaMalloc(&d_materials, 9 * sizeof(Scene::LambertMaterial)));
+	CE(cudaMemcpy(d_materials, &materials, 9 * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
+
+
+	Scene::Plane ground = {make_float3(0.0f, -5.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f), 0u};
+
+	CE(cudaMalloc(&d_planes, 9 * sizeof(Scene::Plane)));
+	CE(cudaMemcpy(d_planes, &ground, 9 * sizeof(Scene::Plane), cudaMemcpyHostToDevice));
+
+
 	Scene::Sphere spheres[9];
 	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f, 0u};
 	spheres[1] = {make_float3(-3.0f, -3.0f, -3.0f), 4.0f, 2u};
@@ -103,17 +121,20 @@ void BasicPathTracer::CreateScene() {
 
 	CE(cudaMalloc(&d_spheres, 9 * sizeof(Scene::Sphere)));
 	CE(cudaMemcpy(d_spheres, &spheres, 9 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
-	m_numSpheres = 9;
 
-	Scene::LambertMaterial materials[4];
-	materials[0] = {make_float3(0.8f, 0.8f, 0.8f)};
-	materials[1] = {make_float3(1.0f, 0.0f, 0.0f)};
-	materials[2] = {make_float3(0.0f, 1.0f, 0.0f)};
-	materials[3] = {make_float3(0.0f, 0.0f, 1.0f)};
 
-	CE(cudaMalloc(&d_materials, 9 * sizeof(Scene::LambertMaterial)));
-	CE(cudaMemcpy(d_materials, &materials, 9 * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
-	m_numMaterials = 4;
+	// Store the representation of the scene in a single object
+	// CUDA only allows 256 bytes of data to be passed as arguments in the kernel launch
+	// We can save some room by bundling all the scene variables together
+	Scene::SceneObjects sceneObjects;
+	sceneObjects.Materials = d_materials;
+	sceneObjects.Planes = d_planes;
+	sceneObjects.NumPlanes = 1u;
+	sceneObjects.Spheres = d_spheres;
+	sceneObjects.NumSpheres = 9u;
+
+	CE(cudaMalloc(&d_sceneObjects, sizeof(Scene::SceneObjects)));
+	CE(cudaMemcpy(d_sceneObjects, &sceneObjects, sizeof(Scene::SceneObjects), cudaMemcpyHostToDevice));
 }
 
 } // End of namespace BasicPathTracer

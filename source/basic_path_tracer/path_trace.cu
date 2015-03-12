@@ -18,12 +18,13 @@
 
 
 
-__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::Sphere *g_spheres, uint numSpheres, Scene::LambertMaterial *g_materials, uint numMaterials, uint hashedFrameNumber) {
+__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::SceneObjects *g_sceneObjects, uint hashedFrameNumber) {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-	// Create a local copy of the camera
+	// Create a local copy of the arguments
 	DeviceCamera camera = *g_camera;
+	Scene::SceneObjects sceneObjects = *g_sceneObjects;
 
 	// Global threadId
 	int threadId = (blockIdx.x + blockIdx.y * gridDim.x) * (blockDim.x * blockDim.y) + (threadIdx.y * blockDim.x) + threadIdx.x;
@@ -39,6 +40,7 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	float3 pixelColor = make_float3(0.0f, 0.0f, 0.0f);
 	float3 accumulatedMaterialColor = make_float3(1.0f, 1.0f, 1.0f);
 
+	// Bounce the ray around the scene
 	for (uint i = 0; i < 20; ++i) {
 		// Initialize the intersection variables
 		float closestIntersection = FLT_MAX;
@@ -46,32 +48,34 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 		float3 materialColor;
 
 		// Try to intersect with the ground plane
-		{
-			Scene::Plane ground = {make_float3(0.0f, -5.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f), 0u};
-		
+		for (uint i = 0; i < sceneObjects.NumPlanes; ++i) {
+			// Make a local copy
+			Scene::Plane plane = sceneObjects.Planes[i];
+
 			float3 newNormal;
-			float intersection = TestRayPlaneIntersection(ray, ground, newNormal);
+			float intersection = TestRayPlaneIntersection(ray, plane, newNormal);
 			if (intersection > 0.0f && intersection < closestIntersection) {
 				closestIntersection = intersection;
 				normal = newNormal;
-				materialColor = g_materials[ground.MaterialId].Color;
+				materialColor = sceneObjects.Materials[plane.MaterialId].Color;
 			}
 		}
 
 		// Try to intersect with the spheres;
-		for (uint i = 0; i < numSpheres; ++i) {
+		for (uint i = 0; i < sceneObjects.NumSpheres; ++i) {
 			// Make a local copy
-			Scene::Sphere sphere = g_spheres[i];
+			Scene::Sphere sphere = sceneObjects.Spheres[i];
 
 			float3 newNormal;
 			float intersection = TestRaySphereIntersection(ray, sphere, newNormal);
 			if (intersection > 0.0f && intersection < closestIntersection) {
 				closestIntersection = intersection;
 				normal = newNormal;
-				materialColor = g_materials[sphere.MaterialId].Color;
+				materialColor = sceneObjects.Materials[sphere.MaterialId].Color;
 			}
 		}
 
+		// Find out if we hit anything
 		if (closestIntersection < FLT_MAX) {
 			// We hit an object
 			accumulatedMaterialColor *= materialColor;

@@ -12,8 +12,10 @@
 
 
 namespace Scene {
-struct Sphere;
 struct LambertMaterial;
+struct Plane;
+struct Sphere;
+struct SceneObjects;
 }
 
 namespace Graphics {
@@ -46,11 +48,12 @@ private:
 	uint m_frameNumber;
 
 	// CUDA device variables
-	Scene::Sphere *d_spheres;
-	uint m_numSpheres;
-	Scene::LambertMaterial *d_materials;
-	uint m_numMaterials;
 	DeviceCamera *d_deviceCamera;
+
+	Scene::LambertMaterial *d_materials;
+	Scene::Plane *d_planes;
+	Scene::Sphere *d_spheres;
+	Scene::SceneObjects *d_sceneObjects;
 
 public:
 	bool Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uint32 screenHeight, bool fullscreen);
