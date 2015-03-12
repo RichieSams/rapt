@@ -6,10 +6,6 @@
 
 #include "basic_path_tracer/path_trace.cuh"
 
-namespace Scene {
-struct Sphere;
-}
-
 
 uint32 WangHash(uint32 a) {
     a = (a ^ 61) ^ (a >> 16);
