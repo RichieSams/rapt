@@ -11,10 +11,7 @@
 #include "graphics/d3d_texture2d.h"
 #include "graphics/d3d_util.h"
 
-#include <cuda_runtime.h>
 #include <cuda_d3d11_interop.h>
-
-#include <DirectXColors.h>
 
 
 void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber);
