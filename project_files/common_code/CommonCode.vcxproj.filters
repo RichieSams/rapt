@@ -54,6 +54,9 @@
     <ClInclude Include="..\..\source\scene\scene_objects.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\scene\object_intersection.cuh">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\clock.cpp">
