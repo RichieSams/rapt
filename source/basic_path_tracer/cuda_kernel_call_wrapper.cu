@@ -16,13 +16,13 @@ uint32 WangHash(uint32 a) {
     return a;
 }
 
-void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, uint frameNumber) {
+void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::Sphere *spheres, uint numSpheres, Scene::LambertMaterial *g_materials, uint numMaterials, uint frameNumber) {
 	cudaError_t error = cudaSuccess;
 
 	dim3 Db = dim3(16, 16);   // block dimensions are fixed to be 256 threads
 	dim3 Dg = dim3((width + Db.x - 1) / Db.x, (height + Db.y - 1) / Db.y);
 
-	PathTraceKernel<<<Dg, Db>>>((unsigned char *)buffer, width, height, pitch, camera, spheres, numSpheres, WangHash(frameNumber));
+	PathTraceKernel<<<Dg, Db>>>((unsigned char *)buffer, width, height, pitch, camera, spheres, numSpheres, g_materials, numMaterials, WangHash(frameNumber));
 
 	error = cudaGetLastError();
 	if (error != cudaSuccess) {

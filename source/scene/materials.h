@@ -11,21 +11,8 @@
 
 namespace Scene {
 
-struct Ray {
-	float3 Origin;
-	float3 Direction;
-};
-
-struct Sphere {
-	float3 Center;
-	float RadiusSquared;
-	uint MaterialId;
-};
-
-struct Plane {
-	float3 Point;
-	float3 Normal;
-	uint MaterialId;
+struct LambertMaterial {
+	float3 Color;
 };
 
 } // End of namespace Scene

@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\source\scene\host_camera.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\scene\materials.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\clock.cpp">

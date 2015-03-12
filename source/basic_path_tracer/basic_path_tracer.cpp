@@ -11,6 +11,7 @@
 #include "graphics/cuda_texture2d.h"
 
 #include "scene/scene_objects.h"
+#include "scene/materials.h"
 #include "scene/device_camera.h"
 
 #include <cuda_runtime.h>
@@ -68,19 +69,30 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 	// TODO: Use a scene description file rather than hard code the scene
 	// (Can probably steal the format used by The Halfling Engine)
 	Scene::Sphere spheres[9];
-	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f};
-	spheres[1] = {make_float3(-6.0f, -6.0f, -6.0f), 4.0f};
-	spheres[2] = {make_float3(-6.0f, -6.0f, 6.0f), 4.0f};
-	spheres[3] = {make_float3(-6.0f, 6.0f, -6.0f), 4.0f};
-	spheres[4] = {make_float3(-6.0f, 6.0f, 6.0f), 4.0f};
-	spheres[5] = {make_float3(6.0f, -6.0f, -6.0f), 4.0f};
-	spheres[6] = {make_float3(6.0f, -6.0f, 6.0f), 4.0f};
-	spheres[7] = {make_float3(6.0f, 6.0f, -6.0f), 4.0f};
-	spheres[8] = {make_float3(6.0f, 6.0f, 6.0f), 4.0f};
+	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f, 0u};
+	spheres[1] = {make_float3(-3.0f, -3.0f, -3.0f), 4.0f, 2u};
+	spheres[2] = {make_float3(-3.0f, -3.0f, 3.0f), 4.0f, 3u};
+	spheres[3] = {make_float3(-3.0f, 3.0f, -3.0f), 4.0f, 1u};
+	spheres[4] = {make_float3(-3.0f, 3.0f, 3.0f), 4.0f, 2u};
+	spheres[5] = {make_float3(3.0f, -3.0f, -3.0f), 4.0f, 3u};
+	spheres[6] = {make_float3(3.0f, -3.0f, 3.0f), 4.0f, 1u};
+	spheres[7] = {make_float3(3.0f, 3.0f, -3.0f), 4.0f, 2u};
+	spheres[8] = {make_float3(3.0f, 3.0f, 3.0f), 4.0f, 3u};
 
 	CE(cudaMalloc(&d_spheres, 9 * sizeof(Scene::Sphere)));
 	CE(cudaMemcpy(d_spheres, &spheres, 9 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
 	m_numSpheres = 9;
+
+	Scene::LambertMaterial materials[4];
+	materials[0] = {make_float3(0.8f, 0.8f, 0.8f)};
+	materials[1] = {make_float3(1.0f, 0.0f, 0.0f)};
+	materials[2] = {make_float3(0.0f, 1.0f, 0.0f)};
+	materials[3] = {make_float3(0.0f, 0.0f, 1.0f)};
+
+	CE(cudaMalloc(&d_materials, 9 * sizeof(Scene::LambertMaterial)));
+	CE(cudaMemcpy(d_materials, &materials, 9 * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
+	m_numMaterials = 4;
+
 
 	CE(cudaMalloc(&d_deviceCamera, sizeof(DeviceCamera)));
 

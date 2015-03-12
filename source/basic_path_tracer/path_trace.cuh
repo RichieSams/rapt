@@ -13,9 +13,10 @@
 
 namespace Scene {
 struct Sphere;
+struct LambertMaterial;
 }
 
 struct DeviceCamera;
 
 
-__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::Sphere *g_spheres, uint numSpheres, uint hashedFrameNumber);
+__global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::Sphere *g_spheres, uint numSpheres, Scene::LambertMaterial *g_materials, uint numMaterials, uint hashedFrameNumber);

@@ -13,6 +13,7 @@
 
 namespace Scene {
 struct Sphere;
+struct LambertMaterial;
 }
 
 namespace Graphics {
@@ -47,6 +48,8 @@ private:
 	// CUDA device variables
 	Scene::Sphere *d_spheres;
 	uint m_numSpheres;
+	Scene::LambertMaterial *d_materials;
+	uint m_numMaterials;
 	DeviceCamera *d_deviceCamera;
 
 public:
