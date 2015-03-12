@@ -20,17 +20,23 @@ void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, Dev
 namespace BasicPathTracer {
 
 void BasicPathTracer::DrawFrame() {
+	////////////////////////////////////////////////////////////////////////////////
+	// Use CUDA to path trace the next frame
+	// and add it to the accumulation buffer
+	////////////////////////////////////////////////////////////////////////////////
+
+	// If the camera has moved, copy the new camera data to the GPU
 	if (m_cameraMoved) {
 		m_hostCamera.UpdateDeviceCameraWithInternalState(d_deviceCamera);
 		m_cameraMoved = false;
 	}
 
-	// Render the next frame using a CUDA kernel
+	// Launch the CUDA kernel
 	PathTraceNextFrame(m_hdrTextureCuda->GetTextureData(), m_clientWidth, m_clientHeight, m_hdrTextureCuda->GetTexturePitch(), d_deviceCamera, d_spheres, m_numSpheres, m_frameNumber++);
 
 
 	////////////////////////////////////////////////////////////////////////////////
-	// Copy the data over to DirectX
+	// Copy the accumulation buffer over to DirectX
 	////////////////////////////////////////////////////////////////////////////////
 
 	// We have to wrap the memcopy in a pair of cudaGraphics(Un)MapResources() calls
@@ -49,7 +55,7 @@ void BasicPathTracer::DrawFrame() {
 
 
 	////////////////////////////////////////////////////////////////////////////////
-	// Use DirectX to copy the texture to screen
+	// Use DirectX to render the accumulation buffer to the screen
 	////////////////////////////////////////////////////////////////////////////////
 
 	// Write the constant buffer data for the pixel shader
@@ -64,7 +70,7 @@ void BasicPathTracer::DrawFrame() {
 
 	m_immediateContext->PSSetConstantBuffers(0u, 1u, &m_copyCudaOutputPSConstantBuffer);
 
-	// Draw the frame to the screen
+	// Draw a fullscreen triangle
 	m_immediateContext->Draw(3u, 0u);
 
 	m_swapChain->Present(0u, 0u);
