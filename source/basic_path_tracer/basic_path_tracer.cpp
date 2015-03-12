@@ -108,7 +108,7 @@ void BasicPathTracer::OnResize() {
 	}
 
 	// Update the camera projection
-	m_hostCamera.SetProjection(DirectX::XM_PIDIV2, (float)m_clientWidth / m_clientHeight);
+	m_hostCamera.SetProjection(1.04719755f, (float)m_clientWidth / m_clientHeight);
 
 	// Release the old views and the old depth/stencil buffer.
 	ReleaseCOM(m_backbufferRTV);
