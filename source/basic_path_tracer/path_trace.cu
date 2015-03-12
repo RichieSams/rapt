@@ -33,9 +33,10 @@ __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uin
  * NOTE: Source adapted from Scratchapixel.com Lesson 7 - Intersecting Simple Shapes
  *       http://www.scratchapixel.com/old/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-sphere-intersection/
  *
- * @param ray       The ray
- * @param sphere    The sphere
- * @return          The distance from the ray origin to the nearest intersection. -1.0f if no intersection
+ * @param ray           The ray to test
+ * @param sphere        The sphere to test
+ * @param normal_out    Filled with normal of the surface at the intersection point. Not changed if no intersection.
+ * @return              The distance from the ray origin to the nearest intersection. -1.0f if no intersection
  */
 __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &sphere, float3 &normal_out) {
 	float3 L = sphere.Center - ray.Origin;
