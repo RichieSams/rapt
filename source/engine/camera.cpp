@@ -84,8 +84,8 @@ void HostCamera::SetDeviceCamera(DeviceCamera *deviceCamera) const {
 
 	camera.Origin = origin;
 
-	camera.TanFovDiv2_X = m_tanFovDiv2_X;
-	camera.TanFovDiv2_Y = m_tanFovDiv2_Y;
+	camera.TanFovXDiv2 = m_tanFovXDiv2;
+	camera.TanFovYDiv2 = m_tanFovYDiv2;
 
 	CE(cudaMemcpy(deviceCamera, &camera, sizeof(DeviceCamera), cudaMemcpyHostToDevice));
 }

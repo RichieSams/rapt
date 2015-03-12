@@ -22,8 +22,8 @@ struct DeviceCamera {
 	
 	float3 Origin;
 
-	float TanFovDiv2_X;
-	float TanFovDiv2_Y;
+	float TanFovXDiv2;
+	float TanFovYDiv2;
 };
 
 namespace Engine {
@@ -40,8 +40,8 @@ public:
 		  m_phi(0.0f), 
 		  m_radius(0.0f), 
 		  m_up(1.0f),
-		  m_tanFovDiv2_X(tan(0.785398f /* PI / 4 */)),
-		  m_tanFovDiv2_Y(tan(0.785398f * 19.0f / 10.0f)),
+		  m_tanFovXDiv2(tan(0.785398f /* PI / 4 */)),
+		  m_tanFovYDiv2(tan(0.785398f * 19.0f / 10.0f)),
 		  m_target(make_float3(0.0f, 0.0f, 0.0f)) {
 	}
 	HostCamera(float theta, float phi, float radius) 
@@ -49,8 +49,8 @@ public:
 		  m_phi(phi), 
 		  m_radius(radius), 
 		  m_up(1.0f),
-		  m_tanFovDiv2_X(tan(0.785398f /* PI / 4 */)),
-		  m_tanFovDiv2_Y(tan(0.785398f * 19.0f / 10.0f)),
+		  m_tanFovXDiv2(tan(0.785398f /* PI / 4 */)),
+		  m_tanFovYDiv2(tan(0.785398f * 19.0f / 10.0f)),
 		  m_target(make_float3(0.0f, 0.0f, 0.0f)) {
 	}
 
@@ -60,8 +60,8 @@ private:
 	float m_radius;
 	float m_up;
 
-	float m_tanFovDiv2_X;
-	float m_tanFovDiv2_Y;
+	float m_tanFovXDiv2;
+	float m_tanFovYDiv2;
 
 	float3 m_target;
 
@@ -93,8 +93,8 @@ public:
 	void Pan(float dx, float dy);
 
 	inline void SetProjection(float fov, float aspectRatio) {
-		m_tanFovDiv2_X = tan(fov * 0.5f);
-		m_tanFovDiv2_Y = tan(fov * 0.5f) / aspectRatio;
+		m_tanFovXDiv2 = tan(fov * 0.5f);
+		m_tanFovYDiv2 = tan(fov * 0.5f) / aspectRatio; // fov_Y = 2.0f * atan(tan(fov_X * 0.5f) / aspectRatio);
 	}
 
 	/**

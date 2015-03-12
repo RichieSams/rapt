@@ -17,8 +17,8 @@
 
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera, curandState *randState) {
-	float3 viewVector = make_float3((((x + curand_uniform(randState)) / width) * 2.0f - 1.0f) * camera.TanFovDiv2_X,
-	                                -(((y + curand_uniform(randState)) / height) * 2.0f - 1.0f) * camera.TanFovDiv2_Y,
+	float3 viewVector = make_float3((((x + curand_uniform(randState)) / width) * 2.0f - 1.0f) * camera.TanFovXDiv2,
+	                                -(((y + curand_uniform(randState)) / height) * 2.0f - 1.0f) * camera.TanFovYDiv2,
 	                                1.0f);
 
 	// Matrix multiply
