@@ -34,7 +34,7 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{50463c18-a2c9-4a2b-b43d-6096ad10e8c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CUDA Kernels">
+    <Filter Include="CUDA Code">
       <UniqueIdentifier>{02acde8e-ef6c-4fc5-b698-ec2b522164cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -43,15 +43,15 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\basic_path_tracer\path_trace.cuh">
-      <Filter>CUDA Kernels</Filter>
+      <Filter>CUDA Code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="..\..\source\basic_path_tracer\cuda_kernel_call_wrapper.cu">
-      <Filter>CUDA Kernels</Filter>
+      <Filter>CUDA Code</Filter>
     </CudaCompile>
     <CudaCompile Include="..\..\source\basic_path_tracer\path_trace.cu">
-      <Filter>CUDA Kernels</Filter>
+      <Filter>CUDA Code</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>
