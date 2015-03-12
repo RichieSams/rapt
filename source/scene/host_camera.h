@@ -15,18 +15,9 @@
 #include <graphics/helper_math.h>
 
 
-struct DeviceCamera {
-	float3 ViewToWorldMatrixR0;
-	float3 ViewToWorldMatrixR1;
-	float3 ViewToWorldMatrixR2;
-	
-	float3 Origin;
+struct DeviceCamera;
 
-	float TanFovXDiv2;
-	float TanFovYDiv2;
-};
-
-namespace Engine {
+namespace Scene {
 
 /** 
  * A class for emulating a camera looking into the scene. 

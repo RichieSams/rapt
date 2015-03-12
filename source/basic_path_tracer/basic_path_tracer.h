@@ -7,7 +7,8 @@
 #pragma once
 
 #include "engine/rapt_engine.h"
-#include "engine/camera.h"
+
+#include "scene/host_camera.h"
 
 
 namespace Scene {
@@ -36,7 +37,7 @@ private:
 	ID3D11PixelShader *m_copyCudaOutputToBackbufferPS;
 	ID3D11Buffer *m_copyCudaOutputPSConstantBuffer;
 
-	Engine::HostCamera m_hostCamera;
+	Scene::HostCamera m_hostCamera;
 	int m_mouseLastPos_X;
 	int m_mouseLastPos_Y;
 	bool m_cameraMoved;

@@ -11,6 +11,7 @@
 #include "graphics/cuda_texture2d.h"
 
 #include "scene/scene_objects.h"
+#include "scene/device_camera.h"
 
 #include <cuda_runtime.h>
 

@@ -6,8 +6,6 @@
 
 #include "basic_path_tracer/basic_path_tracer.h"
 
-#include "engine/camera.h"
-
 #include "graphics/cuda_util.h"
 #include "graphics/cuda_texture2d.h"
 #include "graphics/d3d_texture2d.h"

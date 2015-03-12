@@ -6,6 +6,7 @@
 
 #include "basic_path_tracer/path_trace.cuh"
 
+#include "scene/device_camera.h"
 #define BACKFACE_CULL_SPHERES
 #include "scene/object_intersection.cuh"
 

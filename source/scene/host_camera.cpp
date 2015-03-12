@@ -10,17 +10,19 @@
  * Copyright Adrian Astley 2015
  */
 
-#include "engine/camera.h"
+#include "scene/host_camera.h"
+
+#include "graphics/cuda_util.h"
+
+#include "scene/device_camera.h"
 
 #include <algorithm>
-
-#include <graphics/cuda_util.h>
 
 #define PI 3.141592654f
 #define TWO_PI 6.283185307f
 
 
-namespace Engine {
+namespace Scene {
 
 void HostCamera::Rotate(float dTheta, float dPhi) {
 	if (m_up > 0.0f) {

@@ -45,9 +45,6 @@
     <ClInclude Include="..\..\source\graphics\helper_math.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\engine\camera.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\engine\rapt_engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -55,6 +52,12 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\scene\object_intersection.cuh">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scene\device_camera.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scene\host_camera.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,11 +83,11 @@
     <ClCompile Include="..\..\source\graphics\cuda_texture2d.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\engine\camera.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\engine\rapt_engine.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scene\host_camera.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
