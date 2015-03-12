@@ -90,6 +90,28 @@ __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &spher
 	return nearestIntersection;
 }
 
+
+/**
+ * Test for the intersection of a ray with a plane   
+ *
+ * @param ray           The ray to test
+ * @param plane         The plane to test
+ * @param normal_out    Filled with normal of the surface at the intersection point. Not changed if no intersection.
+ * @return              The distance from the ray origin to the nearest intersection. -1.0f if no intersection
+ */
+__device__ float TestRayPlaneIntersection(Scene::Ray &ray, Scene::Plane &plane, float3 &normal_out) {
+    float denominator = dot(plane.Normal, ray.Direction);
+
+	// If dot product between the vectors is greater than -epison,
+	// the ray is perpendicular to the plane or points away from the plane normal
+	if (denominator > -1.0e-6f) {
+		return -1.0f;
+	}
+
+	normal_out = plane.Normal;
+	return dot(plane.Normal, plane.Point - ray.Origin) / denominator;
+}
+
 __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::Sphere *g_spheres, uint numSpheres, uint hashedFrameNumber) {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;

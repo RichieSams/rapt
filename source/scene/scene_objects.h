@@ -21,4 +21,9 @@ struct Sphere {
 	float RadiusSquared;
 };
 
+struct Plane {
+	float3 Point;
+	float3 Normal;
+};
+
 } // End of namespace Scene
