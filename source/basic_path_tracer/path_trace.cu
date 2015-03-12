@@ -150,28 +150,52 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	// Calculate the first ray for this pixel
 	Scene::Ray ray = {camera.Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera, &randState)};
 
-	// Generate a uniform random number
-	//float randNum = curand_uniform(&randState);
 
-	// Try to intersect with the spheres;
-	float closestIntersection = FLT_MAX;
-	float3 normal;
-	for (uint i = 0; i < numSpheres; ++i) {
-		float3 newNormal;
-		float intersection = TestRaySphereIntersection(ray, g_spheres[i], newNormal);
-		if (intersection > 0.0f && intersection < closestIntersection) {
-			closestIntersection = intersection;
-			normal = newNormal;
+	float3 pixelColor = make_float3(0.0f, 0.0f, 0.0f);
+	float3 accumulatedMaterialColor = make_float3(1.0f, 1.0f, 1.0f);
+
+	for (uint i = 0; i < 20; ++i) {
+		// Initialize the intersection variables
+		float closestIntersection = FLT_MAX;
+		float3 normal;
+
+		// Try to intersect with the ground plane
+		{
+			Scene::Plane ground = {make_float3(0.0f, -8.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f)};
+		
+			float3 newNormal;
+			float intersection = TestRayPlaneIntersection(ray, ground, newNormal);
+			if (intersection > 0.0f && intersection < closestIntersection) {
+				closestIntersection = intersection;
+				normal = newNormal;
+			}
+		}
+
+		// Try to intersect with the spheres;
+		for (uint i = 0; i < numSpheres; ++i) {
+			float3 newNormal;
+			float intersection = TestRaySphereIntersection(ray, g_spheres[i], newNormal);
+			if (intersection > 0.0f && intersection < closestIntersection) {
+				closestIntersection = intersection;
+				normal = newNormal;
+			}
+		}
+
+		if (closestIntersection < FLT_MAX) {
+			// We hit an object
+			accumulatedMaterialColor *= make_float3(0.8f, 0.8f, 0.8f);
+
+			ray.Origin = ray.Origin + ray.Direction * closestIntersection;
+			ray.Direction = CreateRandomDirectionInNormalHemisphere(normal, &randState);
+		} else {
+			// We didn't hit anything
+			// Use the sky color instead and stop bouncing rays
+			pixelColor = make_float3(0.846, 0.933, 0.949) * accumulatedMaterialColor;
+
+			break;
 		}
 	}
-
-	float3 pixelColor;
-	if (closestIntersection < FLT_MAX) {
-		float attentuation = max(dot(normal, make_float3(0.70710678118f, 0.70710678118f, -0.70710678118f)), 0.0f);
-		pixelColor = make_float3(0.846, 0.933, 0.949) * attentuation + make_float3(0.15f, 0.15f, 0.15f);
-	} else {
-		pixelColor = make_float3(0.0f, 0.0f, 0.0f);
-	}
+	
 
 	if (x < width && y < height) {
 		// Get a pointer to the pixel at (x,y)
