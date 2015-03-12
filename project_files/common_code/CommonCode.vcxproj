@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\source\scene\device_camera.h" />
     <ClInclude Include="..\..\source\scene\host_camera.h" />
     <ClInclude Include="..\..\source\scene\object_intersection.cuh" />
+    <ClInclude Include="..\..\source\scene\ray_creation.cuh" />
     <ClInclude Include="..\..\source\scene\scene_objects.h" />
   </ItemGroup>
   <ItemGroup>

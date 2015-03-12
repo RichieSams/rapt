@@ -54,6 +54,9 @@
     <ClInclude Include="..\..\source\scene\object_intersection.cuh">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\scene\ray_creation.cuh">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\scene\device_camera.h">
       <Filter>Scene</Filter>
     </ClInclude>
