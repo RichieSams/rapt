@@ -101,7 +101,13 @@ public:
 		return m_target + make_float3(x, y, z);
 	}
 
-	void SetDeviceCamera(DeviceCamera *deviceCamera) const;
+	/**
+	 * Creates a DeviceCamera using internal state and copies it to the GPU memory
+	 * referenced by deviceCamera
+	 *
+	 * @param deviceCamera    The device camera to update. This MUST point to GPU memory
+	 */
+	void UpdateDeviceCameraWithInternalState(DeviceCamera *deviceCamera) const;
 };
 
 } // End of namespace Scene

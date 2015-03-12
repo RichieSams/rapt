@@ -70,7 +70,7 @@ void HostCamera::Pan(float dx, float dy) {
 	m_target += (right * dx) + (up * dy);
 }
 
-void HostCamera::SetDeviceCamera(DeviceCamera *deviceCamera) const {
+void HostCamera::UpdateDeviceCameraWithInternalState(DeviceCamera *deviceCamera) const {
 	float3 worldUp = make_float3(0.0f, m_up, 0.0f);
 
 	float3 origin = GetCameraPosition();

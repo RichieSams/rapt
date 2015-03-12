@@ -21,7 +21,7 @@ namespace BasicPathTracer {
 
 void BasicPathTracer::DrawFrame() {
 	if (m_cameraMoved) {
-		m_hostCamera.SetDeviceCamera(d_deviceCamera);
+		m_hostCamera.UpdateDeviceCameraWithInternalState(d_deviceCamera);
 		m_cameraMoved = false;
 	}
 
