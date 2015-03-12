@@ -10,6 +10,9 @@
     <ClCompile Include="..\..\source\basic_path_tracer\main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.init.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\source\basic_path_tracer\copy_cuda_output_to_backbuffer_ps.hlsl">

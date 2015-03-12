@@ -188,6 +188,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.cpp" />
     <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.draw.cpp" />
+    <ClCompile Include="..\..\source\basic_path_tracer\basic_path_tracer.init.cpp" />
     <ClCompile Include="..\..\source\basic_path_tracer\main.cpp" />
   </ItemGroup>
   <ItemGroup>

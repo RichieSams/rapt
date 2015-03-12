@@ -57,6 +57,8 @@ public:
 	void Shutdown();
 
 private:
+	void CreateScene();
+
 	void OnResize();
 	void DrawFrame();
 
