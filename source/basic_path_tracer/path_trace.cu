@@ -15,6 +15,9 @@
 
 #include <float.h>
 
+#define TWO_PI 6.283185307f
+#define BACKFACE_CULL_SPHERES
+
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera, curandState *randState) {
 	float3 viewVector = make_float3((((x + curand_uniform(randState)) / width) * 2.0f - 1.0f) * camera.TanFovXDiv2,
@@ -70,11 +73,16 @@ __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &spher
 		normalDirection = 1.0f;
 	} else {
 		// Ray starts inside the sphere
-		// Return the far side of the sphere
-		nearestIntersection = max(firstIntersection, secondIntersection);
 
-		// We reverse the direction of the normal, since we are inside the sphere
-		normalDirection = -1.0f;
+		#ifdef BACKFACE_CULL_SPHERES
+			return -1.0f;
+		#else
+			// Return the far side of the sphere
+			nearestIntersection = max(firstIntersection, secondIntersection);
+
+			// We reverse the direction of the normal, since we are inside the sphere
+			normalDirection = -1.0f;
+		#endif
 	}
 
 	normal_out = normalize(((ray.Origin + (ray.Direction * nearestIntersection)) - sphere.Center) * normalDirection);
