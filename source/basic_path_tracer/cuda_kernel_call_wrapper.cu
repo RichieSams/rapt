@@ -16,12 +16,19 @@ uint32 WangHash(uint32 a) {
     return a;
 }
 
+/**
+ * Any code that uses CUDA semantics has to be a .cu/.cuh file. Instead of forcing
+ * the entire project to be .cu/.cuh files, we can just wrap each cuda kernel launch
+ * in a function. We forward declare the function in other parts of the project and
+ * implement the functions here, in this .cu file.
+ */
 void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::SceneObjects *sceneObjects, uint frameNumber) {
 	cudaError_t error = cudaSuccess;
 
 	dim3 Db = dim3(16, 16);   // block dimensions are fixed to be 256 threads
 	dim3 Dg = dim3((width + Db.x - 1) / Db.x, (height + Db.y - 1) / Db.y);
 
+	// The actual kernel launch call
 	PathTraceKernel<<<Dg, Db>>>((unsigned char *)buffer, width, height, pitch, camera, sceneObjects, WangHash(frameNumber));
 
 	error = cudaGetLastError();
