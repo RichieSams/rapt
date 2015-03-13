@@ -24,33 +24,34 @@
  * @return              The distance from the ray origin to the nearest intersection. -1.0f if no intersection
  */
 __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &sphere, float3 &normal_out) {
+	// NOTE: See http://richiesams.blogspot.com/2015/03/shooting-objects-from-across-way.html for explaination of algorithm
+
 	float3 L = sphere.Center - ray.Origin;
-    float projectedRay = dot(L, ray.Direction);
+    float t_ca = dot(L, ray.Direction);
 
 	// Ray points away from the sphere
-	if (projectedRay < 0) {
+	if (t_ca < 0) {
 		return -1.0f;
 	}
 
-    float distanceToRaySquared = dot(L, L) - projectedRay * projectedRay;
+    float d_squared = dot(L, L) - t_ca * t_ca;
 
 	// Ray misses the sphere
-    if (distanceToRaySquared > sphere.RadiusSquared) {
+    if (d_squared > sphere.RadiusSquared) {
 		return -1.0f;
 	}
 
-	// See http://www.scratchapixel.com/old/assets/Uploads/Lesson007/l007-raysphereisect1.png for definition of 'thc'
-    float thc = sqrt(sphere.RadiusSquared - distanceToRaySquared);
+    float t_hc = sqrt(sphere.RadiusSquared - d_squared);
 
-    float firstIntersection = projectedRay - thc;
-    float secondIntersection = projectedRay + thc;
+    float t_0 = t_ca - t_hc;
+    float t_1 = t_ca + t_hc;
 
 	float nearestIntersection;
 	float normalDirection;
-	if (firstIntersection > 0 && secondIntersection > 0) {
+	if (t_0 > 0 && t_1 > 0) {
 		// Two intersections
 		// Return the nearest of the two
-		nearestIntersection = min(firstIntersection, secondIntersection);
+		nearestIntersection = min(t_0, t_1);
 
 		normalDirection = 1.0f;
 	} else {
