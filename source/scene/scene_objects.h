@@ -28,6 +28,24 @@ struct Plane {
 	uint MaterialId;
 };
 
+struct Rectangle {
+	float3 Point;
+	float3 Normal; // We could derive this by doing cross(Leg1, Leg2), but this would require 
+	               // the end-user to be very careful in choosing the Point and Legs in order
+	               // to get the correct direction of the normal
+	float3 Leg1;
+	float3 Leg2;
+	uint MaterialId;
+};
+
+struct Circle {
+	float3 Point;
+	float3 Normal;
+	float RadiusSquared;
+	uint MaterialId;
+};
+
+
 struct LambertMaterial;
 
 struct SceneObjects {
@@ -35,6 +53,12 @@ struct SceneObjects {
 
 	Plane *Planes;
 	uint NumPlanes;
+
+	Rectangle *Rectangles;
+	uint NumRectangles;
+
+	Circle *Circles;
+	uint NumCircles;
 
 	Sphere *Spheres;
 	uint NumSpheres;
