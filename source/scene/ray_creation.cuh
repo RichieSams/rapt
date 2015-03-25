@@ -15,6 +15,7 @@
 
 
 #define TWO_PI 6.283185307f
+#define INV_SQRT_THREE 0.5773502691896257645091487805019574556476f 
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera, curandState *randState) {
 	float3 viewVector = make_float3((((x + curand_uniform(randState)) / width) * 2.0f - 1.0f) * camera.TanFovXDiv2,
@@ -27,23 +28,48 @@ __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uin
 	                             dot(viewVector, camera.ViewToWorldMatrixR2)));
 }
 
-__device__ float3 CreateRandomDirectionInNormalHemisphere(float3 normal, curandState *randState) {
+
+
+/**
+ * Creates a uniformly random direction in the hemisphere defined by the normal  
+ *
+ * Based off the algorithm and code in 'Physically Based Rendering, 2nd Ed.' - Pharr & Humphreys
+ * Chapter 13 - Example 13.6.1 - Pg. 664
+ *
+ * @param normal        The normal that defines the hemisphere
+ * @param randState     The random state to use for internal random number generation        
+ * @return              A uniformly random direction in the hemisphere
+ */
+__device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState *randState) {
 	// Create a random coordinate in spherical space
-	float randAngle = TWO_PI * curand_uniform(randState);
-	float randDistance = curand_uniform(randState);
-	float distanceFromCenter = sqrt(randDistance);
+	float z = curand_uniform(randState);
+	float r = sqrt(1.0f - z * z);
+	float phi = TWO_PI * curand_uniform(randState);
 	
-	// Find an axis that is not parallel to normal.x
-	float3 majorAxis = abs(normal.x > 0.1f) ? make_float3(0.0f, 1.0f, 0.0f) : make_float3(1.0f, 0.0f, 0.0f);
+	// Find an axis that is not parallel to normal
+	float3 majorAxis;
+	if (abs(normal.x) < INV_SQRT_THREE) { 
+		majorAxis = make_float3(1, 0, 0);
+	} else if (abs(normal.y) < INV_SQRT_THREE) { 
+		majorAxis = make_float3(0, 1, 0);
+	} else {
+		majorAxis = make_float3(0, 0, 1);
+	}
 
 	// Use majorAxis to create a coordinate system relative to world space
 	float3 u = normalize(cross(majorAxis, normal));
 	float3 v = cross(normal, u);
 	float3 w = normal;
 
+	// The position in local space
+	float x = r * cos(phi);
+	float y = r * sin(phi);
+
 	// Transform from spherical coordinates to the cartesian coordinates space
 	// we just defined above, then use the definition to transform to world space
-	return normalize(u * cos(randAngle) * distanceFromCenter +
-	                 v * sin(randAngle) * distanceFromCenter +
-	                 w * sqrt(1.0f - randDistance));
+	return normalize(u * x +
+	                 v * y +
+	                 w * z);
 }
+
+

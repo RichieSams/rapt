@@ -62,7 +62,7 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 
 				// Shoot a new ray
 				ray.Origin = ray.Origin + ray.Direction * closestIntersection;
-				ray.Direction = CreateRandomDirectionInNormalHemisphere(normal, &randState);
+				ray.Direction = CreateUniformDirectionInHemisphere(normal, &randState);
 
 				accumulatedMaterialColor *= material.Color * dot(ray.Direction, normal);
 			} else {
