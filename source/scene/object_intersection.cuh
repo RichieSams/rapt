@@ -191,3 +191,62 @@ __device__ float TestRayCircleIntersection(Scene::Ray &ray, Scene::Circle &circl
 		return -1.0f;
 	}
 }
+
+
+__device__ void TestSceneIntersection(Scene::Ray &ray, Scene::SceneObjects &sceneObjects, float *closestIntersection, float3 *normal, Scene::LambertMaterial *material) {
+	// Try to intersect with the planes
+	for (uint j = 0; j < sceneObjects.NumPlanes; ++j) {
+		// Make a local copy
+		Scene::Plane plane = sceneObjects.Planes[j];
+
+		float3 newNormal;
+		float intersection = TestRayPlaneIntersection(ray, plane, newNormal);
+		if (intersection > 0.0f && intersection < *closestIntersection) {
+			*closestIntersection = intersection;
+			*normal = newNormal;
+			*material = sceneObjects.Materials[plane.MaterialId];
+		}
+	}
+
+	// Try to intersect with the rectangles;
+	for (uint j = 0; j < sceneObjects.NumRectangles; ++j) {
+		// Make a local copy
+		Scene::Rectangle rectangle = sceneObjects.Rectangles[j];
+
+		float3 newNormal;
+		float intersection = TestRayRectangleIntersection(ray, rectangle, newNormal);
+		if (intersection > 0.0f && intersection < *closestIntersection) {
+			*closestIntersection = intersection;
+			*normal = newNormal;
+			*material = sceneObjects.Materials[rectangle.MaterialId];
+		}
+	}
+
+	// Try to intersect with the circles;
+	for (uint j = 0; j < sceneObjects.NumCircles; ++j) {
+		// Make a local copy
+		Scene::Circle circle = sceneObjects.Circles[j];
+
+		float3 newNormal;
+		float intersection = TestRayCircleIntersection(ray, circle, newNormal);
+		if (intersection > 0.0f && intersection < *closestIntersection) {
+			*closestIntersection = intersection;
+			*normal = newNormal;
+			*material = sceneObjects.Materials[circle.MaterialId];
+		}
+	}
+
+	// Try to intersect with the spheres;
+	for (uint j = 0; j < sceneObjects.NumSpheres; ++j) {
+		// Make a local copy
+		Scene::Sphere sphere = sceneObjects.Spheres[j];
+
+		float3 newNormal;
+		float intersection = TestRaySphereIntersection(ray, sphere, newNormal);
+		if (intersection > 0.0f && intersection < *closestIntersection) {
+			*closestIntersection = intersection;
+			*normal = newNormal;
+			*material = sceneObjects.Materials[sphere.MaterialId];
+		}
+	}
+}

@@ -41,39 +41,13 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	float3 accumulatedMaterialColor = make_float3(1.0f, 1.0f, 1.0f);
 
 	// Bounce the ray around the scene
-	for (uint i = 0; i < 20; ++i) {
+	for (uint bounces = 0; bounces < 10; ++bounces) {
 		// Initialize the intersection variables
 		float closestIntersection = FLT_MAX;
 		float3 normal;
-		float3 materialColor;
+		Scene::LambertMaterial material;
 
-		// Try to intersect with the ground plane
-		for (uint i = 0; i < sceneObjects.NumPlanes; ++i) {
-			// Make a local copy
-			Scene::Plane plane = sceneObjects.Planes[i];
-
-			float3 newNormal;
-			float intersection = TestRayPlaneIntersection(ray, plane, newNormal);
-			if (intersection > 0.0f && intersection < closestIntersection) {
-				closestIntersection = intersection;
-				normal = newNormal;
-				materialColor = sceneObjects.Materials[plane.MaterialId].Color;
-			}
-		}
-
-		// Try to intersect with the spheres;
-		for (uint i = 0; i < sceneObjects.NumSpheres; ++i) {
-			// Make a local copy
-			Scene::Sphere sphere = sceneObjects.Spheres[i];
-
-			float3 newNormal;
-			float intersection = TestRaySphereIntersection(ray, sphere, newNormal);
-			if (intersection > 0.0f && intersection < closestIntersection) {
-				closestIntersection = intersection;
-				normal = newNormal;
-				materialColor = sceneObjects.Materials[sphere.MaterialId].Color;
-			}
-		}
+		TestSceneIntersection(ray, sceneObjects, &closestIntersection, &normal, &material);
 
 		// Find out if we hit anything
 		if (closestIntersection < FLT_MAX) {
