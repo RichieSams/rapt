@@ -18,9 +18,6 @@
 
 
 __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::SceneObjects *g_sceneObjects, uint hashedFrameNumber) {
-	int x = blockIdx.x * blockDim.x + threadIdx.x;
-	int y = blockIdx.y * blockDim.y + threadIdx.y;
-
 	// Create a local copy of the arguments
 	DeviceCamera camera = *g_camera;
 	Scene::SceneObjects sceneObjects = *g_sceneObjects;
@@ -31,6 +28,10 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 	// Create random number generator
 	curandState randState;
 	curand_init(hashedFrameNumber + threadId, 0, 0, &randState);
+
+
+	int x = blockIdx.x * blockDim.x + threadIdx.x;
+	int y = blockIdx.y * blockDim.y + threadIdx.y;
 
 	// Calculate the first ray for this pixel
 	Scene::Ray ray = {camera.Origin, CalculateRayDirectionFromPixel(x, y, width, height, camera, &randState)};
@@ -86,13 +87,13 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 			break;
 		}
 	}
-	
+
 
 	if (x < width && y < height) {
 		// Get a pointer to the pixel at (x,y)
 		float *pixel = (float *)(textureData + y * pitch) + 4 /*RGBA*/ * x;
 
-		// Write out pixel data
+		// Write pixel data
 		pixel[0] += pixelColor.x;
 		pixel[1] += pixelColor.y;
 		pixel[2] += pixelColor.z;
