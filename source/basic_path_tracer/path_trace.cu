@@ -17,7 +17,6 @@
 #include <float.h>
 
 
-
 __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::SceneObjects *g_sceneObjects, uint hashedFrameNumber) {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -52,14 +51,37 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 		// Find out if we hit anything
 		if (closestIntersection < FLT_MAX) {
 			// We hit an object
-			accumulatedMaterialColor *= materialColor;
 
-			ray.Origin = ray.Origin + ray.Direction * closestIntersection;
-			ray.Direction = CreateRandomDirectionInNormalHemisphere(normal, &randState);
+			if (material.Type == Scene::MATERIAL_TYPE_EMMISIVE) {
+				// We hit a light
+				pixelColor = accumulatedMaterialColor * material.Color;
+
+				break;
+			} else if (material.Type == Scene::MATERIAL_TYPE_DIFFUSE) {
+				// We hit a diffuse surface
+
+				// Shoot a new ray
+				ray.Origin = ray.Origin + ray.Direction * closestIntersection;
+				ray.Direction = CreateRandomDirectionInNormalHemisphere(normal, &randState);
+
+				accumulatedMaterialColor *= material.Color * dot(ray.Direction, normal);
+			} else {
+				// We hit a specular surface
+
+				// TODO: Implement this
+			}
+
+			// Russian Roulette
+			if (bounces > 3) {
+				float p = max(accumulatedMaterialColor.x, max(accumulatedMaterialColor.y, accumulatedMaterialColor.z));
+				if (curand_uniform(&randState) > p) {
+					return;
+				}
+				accumulatedMaterialColor *= 1 / p;
+			}
 		} else {
-			// We didn't hit anything
-			// Use the sky color instead and stop bouncing rays
-			pixelColor = make_float3(0.846, 0.933, 0.949) * accumulatedMaterialColor;
+			// We didn't hit anything, return the sky color
+			pixelColor = accumulatedMaterialColor * make_float3(0.846f, 0.933f, 0.949f);
 
 			break;
 		}

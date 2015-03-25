@@ -92,15 +92,17 @@ void BasicPathTracer::CreateScene() {
 	// (Can probably steal the format used by The Halfling Engine)
 
 	// Create the scene and copy the data over to the GPU
-	Scene::LambertMaterial materials[4];
-	materials[0] = {make_float3(0.8f, 0.8f, 0.8f)};
-	materials[1] = {make_float3(1.0f, 0.0f, 0.0f)};
-	materials[2] = {make_float3(0.0f, 1.0f, 0.0f)};
-	materials[3] = {make_float3(0.0f, 0.0f, 1.0f)};
 
-	CE(cudaMalloc(&d_materials, 9 * sizeof(Scene::LambertMaterial)));
-	CE(cudaMemcpy(d_materials, &materials, 9 * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
+	#define NUM_MATERIALS 5
+	Scene::LambertMaterial materials[NUM_MATERIALS];
+	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.9f, 0.9f, 0.9f)};
+	materials[1] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.408f, 0.741f, 0.467f)};
+	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.392f, 0.584f, 0.929f)};
+	materials[3] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 0.498f, 0.314f)};
+	materials[4] = {Scene::MATERIAL_TYPE_EMMISIVE, make_float3(4.0f, 4.0f, 4.0f)};
 
+	CE(cudaMalloc(&d_materials, NUM_MATERIALS * sizeof(Scene::LambertMaterial)));
+	CE(cudaMemcpy(d_materials, &materials, NUM_MATERIALS * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
 
 
 	#define NUM_PLANES 1

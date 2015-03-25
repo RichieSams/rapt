@@ -11,7 +11,14 @@
 
 namespace Scene {
 
+enum MaterialType {
+	MATERIAL_TYPE_DIFFUSE,
+	MATERIAL_TYPE_SPECULAR,
+	MATERIAL_TYPE_EMMISIVE
+};
+
 struct LambertMaterial {
+	MaterialType Type;
 	float3 Color;
 };
 
