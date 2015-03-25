@@ -19,7 +19,8 @@ BasicPathTracer::BasicPathTracer(HINSTANCE hinstance)
 	  m_mouseLastPos_X(0),
 	  m_mouseLastPos_Y(0),
 	  m_cameraMoved(true),
-	  m_frameNumber(0u) {
+	  m_frameNumber(0u),
+	  m_exposure(1.0f) {
 }
 
 void BasicPathTracer::OnResize() {

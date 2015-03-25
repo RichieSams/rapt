@@ -47,6 +47,8 @@ private:
 
 	uint m_frameNumber;
 
+	float m_exposure;
+
 	// CUDA device variables
 	DeviceCamera *d_deviceCamera;
 

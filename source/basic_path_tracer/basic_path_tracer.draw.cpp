@@ -14,7 +14,13 @@
 #include <cuda_d3d11_interop.h>
 
 
-void PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::SceneObjects *sceneObjects, uint frameNumber);
+struct D3D_PSConstantData {
+	float InvFrameCount;
+	float Exposure;
+};
+
+
+cudaError PathTraceNextFrame(void *buffer, uint width, uint height, size_t pitch, DeviceCamera *camera, Scene::SceneObjects *sceneObjects, uint frameNumber);
 
 
 namespace BasicPathTracer {
@@ -65,7 +71,12 @@ void BasicPathTracer::DrawFrame() {
 
 	// Lock the constant buffer so it can be written to.
 	HR(m_immediateContext->Map(m_copyCudaOutputPSConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-	memcpy(mappedResource.pData, &invFrameCount, sizeof(float));
+
+	D3D_PSConstantData constData;
+	constData.InvFrameCount = invFrameCount;
+	constData.Exposure = m_exposure;
+	memcpy(mappedResource.pData, &constData, sizeof(D3D_PSConstantData));
+
 	m_immediateContext->Unmap(m_copyCudaOutputPSConstantBuffer, 0);
 
 	m_immediateContext->PSSetConstantBuffers(0u, 1u, &m_copyCudaOutputPSConstantBuffer);

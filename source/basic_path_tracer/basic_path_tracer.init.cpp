@@ -63,7 +63,7 @@ bool BasicPathTracer::Initialize(LPCTSTR mainWndCaption, uint32 screenWidth, uin
 
 	// Create the scene
 	CreateScene();
-
+	m_exposure = 1.0f;
 
 	// Allocate memory for the camera on the GPU
 	CE(cudaMalloc(&d_deviceCamera, sizeof(DeviceCamera)));
