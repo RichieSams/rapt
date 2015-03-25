@@ -14,6 +14,8 @@
 namespace Scene {
 struct LambertMaterial;
 struct Plane;
+struct Rectangle;
+struct Circle;
 struct Sphere;
 struct SceneObjects;
 }
@@ -54,6 +56,8 @@ private:
 
 	Scene::LambertMaterial *d_materials;
 	Scene::Plane *d_planes;
+	Scene::Rectangle *d_rectangles;
+	Scene::Circle *d_circles;
 	Scene::Sphere *d_spheres;
 	Scene::SceneObjects *d_sceneObjects;
 

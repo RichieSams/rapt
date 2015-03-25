@@ -102,25 +102,50 @@ void BasicPathTracer::CreateScene() {
 	CE(cudaMemcpy(d_materials, &materials, 9 * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
 
 
-	Scene::Plane ground = {make_float3(0.0f, -5.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f), 0u};
 
-	CE(cudaMalloc(&d_planes, 9 * sizeof(Scene::Plane)));
-	CE(cudaMemcpy(d_planes, &ground, 9 * sizeof(Scene::Plane), cudaMemcpyHostToDevice));
+	#define NUM_PLANES 1
+	Scene::Plane planes[NUM_PLANES];
+	planes[0] = {make_float3(0.0f, -6.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f), 0u}; // Front
+	
+	CE(cudaMalloc(&d_planes, NUM_PLANES * sizeof(Scene::Plane)));
+	CE(cudaMemcpy(d_planes, &planes, NUM_PLANES * sizeof(Scene::Plane), cudaMemcpyHostToDevice));
+
+	
+	#define NUM_RECTANGLES 0
+	//Scene::Rectangle rectangles[NUM_RECTANGLES];
+	//rectangles[0] = {make_float3(0.0f, 0.0f, -20.0f), make_float3(0.0f, 0.0f, 1.0f), make_float3(20.0f, 0.0f, 0.0f), make_float3(0.0f, 20.0f, 0.0f), 0u}; // Front
+	//rectangles[1] = {make_float3(-20.0f, 0.0f, 0.0f), make_float3(1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), make_float3(0.0f, 20.0f, 0.0f), 1u}; // Left
+	//rectangles[2] = {make_float3(0.0f, -20.0f, 0.0f), make_float3(0.0f, 1.0f, 0.0f), make_float3(20.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), 0u}; // Bottom
+	//rectangles[3] = {make_float3(0.0f, 0.0f, 20.0f), make_float3(0.0f, 0.0f, -1.0f), make_float3(20.0f, 0.0f, 0.0f), make_float3(0.0f, 20.0f, 0.0f), 0u}; // Back
+	//rectangles[4] = {make_float3(20.0f, 0.0f, 0.0f), make_float3(-1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), make_float3(0.0f, 20.0f, 0.0f), 3u}; // Right
+	//rectangles[5] = {make_float3(0.0f, 20.0f, 0.0f), make_float3(0.0f, -1.0f, 0.0f), make_float3(20.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), 0u}; // Top
+
+	//CE(cudaMalloc(&d_rectangles, NUM_RECTANGLES * sizeof(Scene::Rectangle)));
+	//CE(cudaMemcpy(d_rectangles, &rectangles, NUM_RECTANGLES * sizeof(Scene::Rectangle), cudaMemcpyHostToDevice));
 
 
-	Scene::Sphere spheres[9];
-	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f, 0u};
-	spheres[1] = {make_float3(-3.0f, -3.0f, -3.0f), 4.0f, 2u};
-	spheres[2] = {make_float3(-3.0f, -3.0f, 3.0f), 4.0f, 3u};
-	spheres[3] = {make_float3(-3.0f, 3.0f, -3.0f), 4.0f, 1u};
-	spheres[4] = {make_float3(-3.0f, 3.0f, 3.0f), 4.0f, 2u};
-	spheres[5] = {make_float3(3.0f, -3.0f, -3.0f), 4.0f, 3u};
-	spheres[6] = {make_float3(3.0f, -3.0f, 3.0f), 4.0f, 1u};
-	spheres[7] = {make_float3(3.0f, 3.0f, -3.0f), 4.0f, 2u};
-	spheres[8] = {make_float3(3.0f, 3.0f, 3.0f), 4.0f, 3u};
+	#define NUM_CIRCLES 0
+	//Scene::Circle circles[NUM_CIRCLES];
+	//circles[0] = {make_float3(0.0f, 19.99f, 0.0f), make_float3(0.0f, -1.0f, 0.0f), 8.0f, 4u}; // Light
 
-	CE(cudaMalloc(&d_spheres, 9 * sizeof(Scene::Sphere)));
-	CE(cudaMemcpy(d_spheres, &spheres, 9 * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
+	//CE(cudaMalloc(&d_circles, NUM_CIRCLES * sizeof(Scene::Circle)));
+	//CE(cudaMemcpy(d_circles, &circles, NUM_CIRCLES * sizeof(Scene::Circle), cudaMemcpyHostToDevice));
+
+
+	#define NUM_SPHERES 9
+	Scene::Sphere spheres[NUM_SPHERES];
+	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f, 4u};
+	spheres[1] = {make_float3(-4.0f, -4.0f, -4.0f), 4.0f, 1u};
+	spheres[2] = {make_float3(-4.0f, -4.0f, 4.0f), 4.0f, 2u};
+	spheres[3] = {make_float3(-4.0f, 4.0f, -4.0f), 4.0f, 3u};
+	spheres[4] = {make_float3(-4.0f, 4.0f, 4.0f), 4.0f, 0u};
+	spheres[5] = {make_float3(4.0f, -4.0f, -4.0f), 4.0f, 0u};
+	spheres[6] = {make_float3(4.0f, -4.0f, 4.0f), 4.0f, 3u};
+	spheres[7] = {make_float3(4.0f, 4.0f, -4.0f), 4.0f, 2u};
+	spheres[8] = {make_float3(4.0f, 4.0f, 4.0f), 4.0f, 1u};
+
+	CE(cudaMalloc(&d_spheres, NUM_SPHERES * sizeof(Scene::Sphere)));
+	CE(cudaMemcpy(d_spheres, &spheres, NUM_SPHERES * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
 
 
 	// Store the representation of the scene in a single object
@@ -129,9 +154,13 @@ void BasicPathTracer::CreateScene() {
 	Scene::SceneObjects sceneObjects;
 	sceneObjects.Materials = d_materials;
 	sceneObjects.Planes = d_planes;
-	sceneObjects.NumPlanes = 1u;
+	sceneObjects.NumPlanes = NUM_PLANES;
+	sceneObjects.Rectangles = d_rectangles;
+	sceneObjects.NumRectangles = NUM_RECTANGLES;
+	sceneObjects.Circles = d_circles;
+	sceneObjects.NumCircles = NUM_CIRCLES;
 	sceneObjects.Spheres = d_spheres;
-	sceneObjects.NumSpheres = 9u;
+	sceneObjects.NumSpheres = NUM_SPHERES;
 
 	CE(cudaMalloc(&d_sceneObjects, sizeof(Scene::SceneObjects)));
 	CE(cudaMemcpy(d_sceneObjects, &sceneObjects, sizeof(Scene::SceneObjects), cudaMemcpyHostToDevice));
