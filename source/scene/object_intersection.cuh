@@ -85,9 +85,9 @@ __device__ float TestRaySphereIntersection(Scene::Ray &ray, Scene::Sphere &spher
 __device__ float TestRayPlaneIntersection(Scene::Ray &ray, Scene::Plane &plane, float3 &normal_out) {
     float denominator = dot(plane.Normal, ray.Direction);
 
-	// If dot product between the vectors is greater than -epison,
+	// If dot product between the vectors is greater than 0.0f,
 	// the ray is perpendicular to the plane or points away from the plane normal
-	if (denominator > -1.0e-6f) {
+	if (denominator > 0.0f) {
 		return -1.0f;
 	}
 
