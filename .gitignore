@@ -12,7 +12,6 @@ bin/
 *.sdf
 *.opensdf
 *.suo
-*.vcxproj.user
 *.vcxproj.*.nvuser
 
 
