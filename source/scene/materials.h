@@ -13,13 +13,13 @@ namespace Scene {
 
 enum MaterialType {
 	MATERIAL_TYPE_DIFFUSE,
-	MATERIAL_TYPE_SPECULAR,
-	MATERIAL_TYPE_EMMISIVE
+	MATERIAL_TYPE_SPECULAR
 };
 
 struct LambertMaterial {
-	MaterialType Type;
-	float3 Color;
+	MaterialType MaterialType;
+	float3 MainColor;
+	float3 EmmisiveColor;
 };
 
 } // End of namespace Scene

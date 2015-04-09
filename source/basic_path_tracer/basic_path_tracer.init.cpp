@@ -93,13 +93,14 @@ void BasicPathTracer::CreateScene() {
 
 	// Create the scene and copy the data over to the GPU
 
-	#define NUM_MATERIALS 5
+	#define NUM_MATERIALS 6
 	Scene::LambertMaterial materials[NUM_MATERIALS];
-	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.9f, 0.9f, 0.9f)};
-	materials[1] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.408f, 0.741f, 0.467f)};
-	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.392f, 0.584f, 0.929f)};
-	materials[3] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 0.498f, 0.314f)};
-	materials[4] = {Scene::MATERIAL_TYPE_EMMISIVE, make_float3(4.0f, 4.0f, 4.0f)};
+	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.9f, 0.9f, 0.9f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[1] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.408f, 0.741f, 0.467f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.392f, 0.584f, 0.929f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[3] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 0.498f, 0.314f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[4] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.4f, 0.4f, 0.4f), make_float3(3.0f, 3.0f, 3.0f)};
+	materials[5] = {Scene::MATERIAL_TYPE_SPECULAR, make_float3(1.0f, 1.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
 
 	CE(cudaMalloc(&d_materials, NUM_MATERIALS * sizeof(Scene::LambertMaterial)));
 	CE(cudaMemcpy(d_materials, &materials, NUM_MATERIALS * sizeof(Scene::LambertMaterial), cudaMemcpyHostToDevice));
@@ -140,8 +141,8 @@ void BasicPathTracer::CreateScene() {
 	spheres[1] = {make_float3(-4.0f, -4.0f, -4.0f), 4.0f, 1u};
 	spheres[2] = {make_float3(-4.0f, -4.0f, 4.0f), 4.0f, 2u};
 	spheres[3] = {make_float3(-4.0f, 4.0f, -4.0f), 4.0f, 3u};
-	spheres[4] = {make_float3(-4.0f, 4.0f, 4.0f), 4.0f, 0u};
-	spheres[5] = {make_float3(4.0f, -4.0f, -4.0f), 4.0f, 0u};
+	spheres[4] = {make_float3(-4.0f, 4.0f, 4.0f), 4.0f, 5u};
+	spheres[5] = {make_float3(4.0f, -4.0f, -4.0f), 4.0f, 5u};
 	spheres[6] = {make_float3(4.0f, -4.0f, 4.0f), 4.0f, 3u};
 	spheres[7] = {make_float3(4.0f, 4.0f, -4.0f), 4.0f, 2u};
 	spheres[8] = {make_float3(4.0f, 4.0f, 4.0f), 4.0f, 1u};

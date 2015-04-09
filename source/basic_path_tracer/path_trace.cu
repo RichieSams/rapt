@@ -16,6 +16,8 @@
 #include <device_launch_parameters.h>
 #include <float.h>
 
+#define IMPORTANCE_SAMPLE
+
 
 __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint height, size_t pitch, DeviceCamera *g_camera, Scene::SceneObjects *g_sceneObjects, uint hashedFrameNumber) {
 	// Create a local copy of the arguments
@@ -53,24 +55,45 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 		if (closestIntersection < FLT_MAX) {
 			// We hit an object
 
-			if (material.Type == Scene::MATERIAL_TYPE_EMMISIVE) {
-				// We hit a light
-				pixelColor = accumulatedMaterialColor * material.Color;
+			// Add the emmisive light
+			pixelColor += accumulatedMaterialColor * material.EmmisiveColor;
 
-				break;
-			} else if (material.Type == Scene::MATERIAL_TYPE_DIFFUSE) {
-				// We hit a diffuse surface
 
-				// Shoot a new ray
-				ray.Origin = ray.Origin + ray.Direction * closestIntersection;
-				ray.Direction = CreateUniformDirectionInHemisphere(normal, &randState);
+			// Shoot a new ray
 
-				accumulatedMaterialColor *= material.Color * dot(ray.Direction, normal);
-			} else {
-				// We hit a specular surface
+			// Set the origin at the intersection point
+			ray.Origin = ray.Origin + ray.Direction * closestIntersection;
+			// Offset the origin to prevent self intersection
+			ray.Origin += normal * 0.001f;
 
-				// TODO: Implement this
+			// Choose the direction based on the material
+			if (material.MaterialType == Scene::MATERIAL_TYPE_DIFFUSE) {
+				#ifdef IMPORTANCE_SAMPLE
+					ray.Direction = CreateCosineWeightedDirectionInHemisphere(normal, &randState);
+
+					// Accumulate the diffuse/specular color
+					accumulatedMaterialColor *= material.MainColor; // * dot(ray.Direction, normal) / PI     // Cancels with pdf
+
+					// Divide by the pdf
+					//accumulatedMaterialColor /= dot(ray.Direction, normal) / PI
+				#else
+					ray.Direction = CreateUniformDirectionInHemisphere(normal, &randState);
+
+					// Accumulate the diffuse/specular color
+					accumulatedMaterialColor *= material.MainColor /* * (1 / PI)  <- this cancels with the PI in the pdf */ * dot(ray.Direction, normal);
+
+					// Divide by the pdf
+					accumulatedMaterialColor *= 2.0f; // pdf == 1 / (2 * PI)
+				#endif
+			} else if (material.MaterialType == Scene::MATERIAL_TYPE_SPECULAR) {
+				ray.Direction = reflect(ray.Direction, normal);
+
+				// Accumulate the diffuse/specular color
+				accumulatedMaterialColor *= material.MainColor;
 			}
+
+			
+			
 
 			// Russian Roulette
 			if (bounces > 3) {
@@ -82,7 +105,7 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 			}
 		} else {
 			// We didn't hit anything, return the sky color
-			pixelColor = accumulatedMaterialColor * make_float3(0.846f, 0.933f, 0.949f);
+			pixelColor += accumulatedMaterialColor * make_float3(0.846f, 0.933f, 0.949f);
 
 			break;
 		}
