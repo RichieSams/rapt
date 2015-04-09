@@ -14,7 +14,9 @@
 #include <curand_kernel.h>
 
 
+#define PI 3.14159265359f
 #define TWO_PI 6.283185307f
+#define PI_DIV_TWO 1.57079632679f
 #define INV_SQRT_THREE 0.5773502691896257645091487805019574556476f 
 
 __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uint height, DeviceCamera &camera, curandState *randState) {
@@ -31,21 +33,15 @@ __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uin
 
 
 /**
- * Creates a uniformly random direction in the hemisphere defined by the normal  
+ * Creates a uniformly random direction in the hemisphere defined by the normal
  *
- * Based off the algorithm and code in 'Physically Based Rendering, 2nd Ed.' - Pharr & Humphreys
- * Chapter 13 - Example 13.6.1 - Pg. 664
+ * Based on http://www.rorydriscoll.com/2009/01/07/better-sampling/
  *
  * @param normal        The normal that defines the hemisphere
  * @param randState     The random state to use for internal random number generation        
  * @return              A uniformly random direction in the hemisphere
  */
-__device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState *randState) {
-	// Create a random coordinate in spherical space
-	float z = curand_uniform(randState);
-	float r = sqrt(1.0f - z * z);
-	float phi = TWO_PI * curand_uniform(randState);
-	
+__device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState *randState) {	
 	// Find an axis that is not parallel to normal
 	float3 majorAxis;
 	if (abs(normal.x) < INV_SQRT_THREE) { 
@@ -61,9 +57,12 @@ __device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState 
 	float3 v = cross(normal, u);
 	float3 w = normal;
 
-	// The position in local space
-	float x = r * cos(phi);
-	float y = r * sin(phi);
+	// Create a random coordinate in spherical space
+	float z = curand_uniform(randState);
+	float r = sqrt(1.0f - z * z);
+    float phi = TWO_PI * curand_uniform(randState);
+	float x = cos(phi) * r;
+	float y = sin(phi) * r;
 
 	// Transform from spherical coordinates to the cartesian coordinates space
 	// we just defined above, then use the definition to transform to world space
@@ -76,22 +75,13 @@ __device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState 
 /**
  * Creates a random direction in the hemisphere defined by the normal, weighted by a cosine lobe  
  *
- * Based off the algorithm and code in 'Physically Based Rendering, 2nd Ed.' - Pharr & Humphreys
- * Chapter 13 - Example 13.6.2 & 13.63 - Pgs. 664 to 669
+ * Based on http://www.rorydriscoll.com/2009/01/07/better-sampling/
  *
  * @param normal        The normal that defines the hemisphere
  * @param randState     The random state to use for internal random number generation        
  * @return              A cosine weighted random direction in the hemisphere
  */
 __device__ float3 CreateCosineWeightedDirectionInHemisphere(float3 normal, curandState *randState) {
-	// Create a random coordinate in spherical space
-	float theta = TWO_PI * curand_uniform(randState);
-	float r = curand_uniform(randState);
-	
-	// The position in local space
-	float x = r * cos(theta);
-	float y = r * sin(theta);
-
 	// Find an axis that is not parallel to normal
 	float3 majorAxis;
 	if (abs(normal.x) < INV_SQRT_THREE) { 
@@ -107,11 +97,17 @@ __device__ float3 CreateCosineWeightedDirectionInHemisphere(float3 normal, curan
 	float3 v = cross(normal, u);
 	float3 w = normal;
 
+	// Create random coordinates in the local coordinate system
+	float rand = curand_uniform(randState);
+	float r = sqrt(rand);
+	float theta = curand_uniform(randState) * TWO_PI; 
+	
+	float x = r * cos(theta);
+	float y = r * sin(theta);
+    
+
 	// Transform from local coordinates to world coordinates
-	// Z is projected from the unit disk up to the hemisphere
-	//     This creates the cosine weighting. 
-	//     This is known as "Mallay's Method"
-	return normalize(u * x +
+    return normalize(u * x +
 	                 v * y +
-	                 w * sqrt(1.0f - x * x - y * y));
+	                 w * sqrt(fmaxf(0.0f, 1.0f - rand)));
 }
