@@ -168,7 +168,7 @@ void BasicPathTracer::CreateCornellBoxScene() {
 	Scene::LambertMaterial materials[NUM_MATERIALS];
 	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 1.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
 	materials[1] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 0.0f)};
-	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 0.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 1.0f, 0.0f), make_float3(0.0f, 0.0f, 0.0f)};
 	materials[3] = {Scene::MATERIAL_TYPE_SPECULAR, make_float3(0.95f, 0.95f, 0.95f), make_float3(0.0f, 0.0f, 0.0f)};
 	materials[4] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 0.0f, 0.0f), make_float3(10.0f, 10.0f, 10.0f)};
 
