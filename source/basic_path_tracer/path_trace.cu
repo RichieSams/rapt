@@ -92,14 +92,12 @@ __global__ void PathTraceKernel(unsigned char *textureData, uint width, uint hei
 				accumulatedMaterialColor *= material.MainColor;
 			}
 
-			
-			
 
 			// Russian Roulette
 			if (bounces > 3) {
 				float p = max(accumulatedMaterialColor.x, max(accumulatedMaterialColor.y, accumulatedMaterialColor.z));
 				if (curand_uniform(&randState) > p) {
-					return;
+					break;
 				}
 				accumulatedMaterialColor *= 1 / p;
 			}
