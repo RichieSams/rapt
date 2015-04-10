@@ -24,6 +24,27 @@
 
 namespace Scene {
 
+void HostCamera::SetCamera(float theta, float phi, float radius, float3 target) {
+	m_theta = theta;
+	m_phi = phi;
+	m_radius = radius;
+	m_target = target;
+
+	// Keep phi within -2PI to +2PI for easy 'up' comparison
+	if (m_phi > TWO_PI) {
+		m_phi -= TWO_PI;
+	} else if (m_phi < -TWO_PI) {
+		m_phi += TWO_PI;
+	}
+
+	// If phi is between 0 to PI or -PI to -2PI, make 'up' be positive Y, other wise make it negative Y
+	if ((m_phi > 0 && m_phi < PI) || (m_phi < -PI && m_phi > -TWO_PI)) {
+		m_up = 1.0f;
+	} else {
+		m_up = -1.0f;
+	}
+}
+
 void HostCamera::Rotate(float dTheta, float dPhi) {
 	if (m_up > 0.0f) {
 		m_theta += dTheta;

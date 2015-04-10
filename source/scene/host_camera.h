@@ -57,6 +57,7 @@ private:
 	float3 m_target;
 
 public:
+	void SetCamera(float theta, float phi, float radius, float3 target = make_float3(0.0f, 0.0f, 0.0f));
 	/**
 	 * Rotate the camera about a point in front of it (m_target). Theta is a rotation 
 	 * that tilts the camera forward and backward. Phi tilts the camera side to side. 
