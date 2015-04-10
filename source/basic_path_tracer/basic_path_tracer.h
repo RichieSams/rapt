@@ -67,6 +67,8 @@ public:
 
 private:
 	void CreateScene();
+	void CreateNineBallsScene();
+	void CreateCornellBoxScene();
 
 	void OnResize();
 	void DrawFrame();
