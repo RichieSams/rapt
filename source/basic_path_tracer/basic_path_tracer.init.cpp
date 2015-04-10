@@ -155,6 +155,10 @@ void BasicPathTracer::CreateNineBallsScene() {
 	CE(cudaMemcpy(d_sceneObjects, &sceneObjects, sizeof(Scene::SceneObjects), cudaMemcpyHostToDevice));
 
 
+	// Set the camera
+	m_hostCamera.SetCamera(-DirectX::XM_PI, DirectX::XM_PIDIV2, 30.0f);
+
+
 	// Set the exposure
 	m_exposure = 1.0f;
 }
@@ -162,10 +166,10 @@ void BasicPathTracer::CreateNineBallsScene() {
 void BasicPathTracer::CreateCornellBoxScene() {
 	#define NUM_MATERIALS 5
 	Scene::LambertMaterial materials[NUM_MATERIALS];
-	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.9f, 0.9f, 0.9f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[0] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 1.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
 	materials[1] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 0.0f)};
-	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 1.0f, 0.0f), make_float3(0.0f, 0.0f, 0.0f)};
-	materials[3] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 0.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[2] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 0.0f, 1.0f), make_float3(0.0f, 0.0f, 0.0f)};
+	materials[3] = {Scene::MATERIAL_TYPE_SPECULAR, make_float3(0.95f, 0.95f, 0.95f), make_float3(0.0f, 0.0f, 0.0f)};
 	materials[4] = {Scene::MATERIAL_TYPE_DIFFUSE, make_float3(0.0f, 0.0f, 0.0f), make_float3(10.0f, 10.0f, 10.0f)};
 
 	CE(cudaMalloc(&d_materials, NUM_MATERIALS * sizeof(Scene::LambertMaterial)));
@@ -181,7 +185,7 @@ void BasicPathTracer::CreateCornellBoxScene() {
 	rectangles[1] = {make_float3(-10.0f, -10.0f, -10.0f), make_float3(1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), make_float3(0.0f, 20.0f, 0.0f), 1u}; // Left
 	rectangles[2] = {make_float3(-10.0f, -10.0f, -10.0f), make_float3(0.0f, 1.0f, 0.0f), make_float3(20.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, 20.0f), 0u}; // Bottom
 	rectangles[3] = {make_float3(10.0f, 10.0f, 10.0f), make_float3(0.0f, 0.0f, -1.0f), make_float3(-20.0f, 0.0f, 0.0f), make_float3(0.0f, -20.0f, 0.0f), 0u}; // Back
-	rectangles[4] = {make_float3(10.0f, 10.0f, 10.0f), make_float3(-1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, -20.0f), make_float3(0.0f, -20.0f, 0.0f), 3u}; // Right
+	rectangles[4] = {make_float3(10.0f, 10.0f, 10.0f), make_float3(-1.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, -20.0f), make_float3(0.0f, -20.0f, 0.0f), 2u}; // Right
 	rectangles[5] = {make_float3(10.0f, 10.0f, 10.0f), make_float3(0.0f, -1.0f, 0.0f), make_float3(-20.0f, 0.0f, 0.0f), make_float3(0.0f, 0.0f, -20.0f), 0u}; // Top
 
 	CE(cudaMalloc(&d_rectangles, NUM_RECTANGLES * sizeof(Scene::Rectangle)));
@@ -196,9 +200,10 @@ void BasicPathTracer::CreateCornellBoxScene() {
 	CE(cudaMemcpy(d_circles, &circles, NUM_CIRCLES * sizeof(Scene::Circle), cudaMemcpyHostToDevice));
 
 
-	#define NUM_SPHERES 1
+	#define NUM_SPHERES 2
 	Scene::Sphere spheres[NUM_SPHERES];
-	spheres[0] = {make_float3(0.0f, 0.0f, 0.0f), 4.0f, 0u};
+	spheres[0] = {make_float3(-5.0f, -7.0f, -3.0f), 9.0f, 0u};
+	spheres[1] = {make_float3(3.0f, -7.0f, 5.0f), 9.0f, 3u};
 
 	CE(cudaMalloc(&d_spheres, NUM_SPHERES * sizeof(Scene::Sphere)));
 	CE(cudaMemcpy(d_spheres, &spheres, NUM_SPHERES * sizeof(Scene::Sphere), cudaMemcpyHostToDevice));
@@ -220,6 +225,10 @@ void BasicPathTracer::CreateCornellBoxScene() {
 
 	CE(cudaMalloc(&d_sceneObjects, sizeof(Scene::SceneObjects)));
 	CE(cudaMemcpy(d_sceneObjects, &sceneObjects, sizeof(Scene::SceneObjects), cudaMemcpyHostToDevice));
+
+
+	// Set the camera
+	m_hostCamera.SetCamera(-DirectX::XM_PI, DirectX::XM_PIDIV2, 45.0f);
 
 
 	// Set the exposure
