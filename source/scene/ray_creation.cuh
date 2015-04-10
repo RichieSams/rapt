@@ -42,6 +42,14 @@ __device__ float3 CalculateRayDirectionFromPixel(uint x, uint y, uint width, uin
  * @return              A uniformly random direction in the hemisphere
  */
 __device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState *randState) {	
+	// Create a random coordinate in spherical space
+	// Then calculate the cartesian equivalent
+	float z = curand_uniform(randState);
+	float r = sqrt(1.0f - z * z);
+    float phi = TWO_PI * curand_uniform(randState);
+	float x = cos(phi) * r;
+	float y = sin(phi) * r;
+
 	// Find an axis that is not parallel to normal
 	float3 majorAxis;
 	if (abs(normal.x) < INV_SQRT_THREE) { 
@@ -56,13 +64,6 @@ __device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState 
 	float3 u = normalize(cross(majorAxis, normal));
 	float3 v = cross(normal, u);
 	float3 w = normal;
-
-	// Create a random coordinate in spherical space
-	float z = curand_uniform(randState);
-	float r = sqrt(1.0f - z * z);
-    float phi = TWO_PI * curand_uniform(randState);
-	float x = cos(phi) * r;
-	float y = sin(phi) * r;
 
 	// Transform from spherical coordinates to the cartesian coordinates space
 	// we just defined above, then use the definition to transform to world space
@@ -82,6 +83,15 @@ __device__ float3 CreateUniformDirectionInHemisphere(float3 normal, curandState 
  * @return              A cosine weighted random direction in the hemisphere
  */
 __device__ float3 CreateCosineWeightedDirectionInHemisphere(float3 normal, curandState *randState) {
+	// Create random coordinates in the local coordinate system
+	float rand = curand_uniform(randState);
+	float r = sqrt(rand);
+	float theta = curand_uniform(randState) * TWO_PI; 
+	
+	float x = r * cos(theta);
+	float y = r * sin(theta);
+    
+
 	// Find an axis that is not parallel to normal
 	float3 majorAxis;
 	if (abs(normal.x) < INV_SQRT_THREE) { 
@@ -97,14 +107,6 @@ __device__ float3 CreateCosineWeightedDirectionInHemisphere(float3 normal, curan
 	float3 v = cross(normal, u);
 	float3 w = normal;
 
-	// Create random coordinates in the local coordinate system
-	float rand = curand_uniform(randState);
-	float r = sqrt(rand);
-	float theta = curand_uniform(randState) * TWO_PI; 
-	
-	float x = r * cos(theta);
-	float y = r * sin(theta);
-    
 
 	// Transform from local coordinates to world coordinates
     return normalize(u * x +
